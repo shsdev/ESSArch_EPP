@@ -22,7 +22,7 @@
 # Cannot use set -e/bash -e since the kill -0 command will abort
 # abnormally in the absence of a valid process ID.
 #set -e
-LOCK_FILE=/var/lock/subsys/celerybeat
+LOCK_FILE=/var/lock/celerybeat
 VERSION=10.0
 echo "celery init v${VERSION}."
 

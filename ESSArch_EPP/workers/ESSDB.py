@@ -29,6 +29,13 @@ import re
 __version__ = '%s.%s' % (__majorversion__,re.sub('[\D]', '',__revision__))
 import MySQLdb 
 
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_dev')
+
+import django
+django.setup()
+
 from django.conf import settings
 
 DBuser = ''
@@ -36,13 +43,13 @@ DATABASES_dict = getattr(settings,'DATABASES',{})
 if DATABASES_dict:
     default_db = DATABASES_dict.get('default',{})
     if default_db.get('ENGINE','').find('mysql') > -1:
-        DBuser = default_db.get('USER','arkiv')
-        DBpasswd = default_db.get('PASSWORD','password')
-        DBname = default_db.get('NAME','essarch')
+        DBuser = default_db.get('USER','root')
+        DBpasswd = default_db.get('PASSWORD','<MYSQLROOTPASSWORD>')
+        DBname = default_db.get('NAME','eark')
 if not DBuser:
-    DBuser = 'arkiv'
-    DBpasswd = 'password'
-    DBname = 'essarch'
+    DBuser = 'root'
+    DBpasswd = '<MYSQLROOTPASSWORD>'
+    DBname = 'eark'
 
 Debug = 0
 

@@ -321,7 +321,7 @@ if __name__ == "__main__":
     if options.process:
         LogFile,Time,Status,Run = ESSDB.DB().action('ESSProc','GET',('LogFile','Time','Status','Run'),('Name',ProcName))[0]
     else:
-        LogFile = '/ESSArch/log/ESSlogging.log'
+        LogFile = '/var/log/ESSArch/log/ESSlogging.log'
     ##########################
     # Log format
     MultiProc = 1
@@ -369,7 +369,7 @@ if __name__ == "__main__":
     ###########################
     # LocalFileHandler
     log_ProcName = 'web_gui_index'
-    LogFile = '/ESSArch/log/' + log_ProcName + '_2.log' 
+    LogFile = '/var/log/ESSArch/log/' + log_ProcName + '_2.log'
     LocalFileHandler_web_gui_index = logging.handlers.TimedRotatingFileHandler(LogFile, when='W6', backupCount=1040)
     LocalFileHandler_web_gui_index.setLevel(LogLevel)
     LocalFileHandler_web_gui_index.setFormatter(essFormatter1)
@@ -377,7 +377,7 @@ if __name__ == "__main__":
     ###########################
     # LocalFileHandler
     log_ProcName = 'web_gui_robot'
-    LogFile = '/ESSArch/log/' + log_ProcName + '_2.log'
+    LogFile = '/var/log/ESSArch/log/' + log_ProcName + '_2.log'
     LocalFileHandler_web_gui_robot = logging.handlers.TimedRotatingFileHandler(LogFile, when='W6', backupCount=1040)
     LocalFileHandler_web_gui_robot.setLevel(LogLevel)
     LocalFileHandler_web_gui_robot.setFormatter(essFormatter1)

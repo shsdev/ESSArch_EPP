@@ -28,6 +28,9 @@ __author__ = "$Author$"
 import re
 __version__ = '%s.%s' % (__majorversion__,re.sub('[\D]', '',__revision__))
 
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 #Imports
 import pytz, datetime, string, csv, os, uuid, ESSPGM, ESSDB, time, urllib, logging, shutil
 from lxml import etree
@@ -1204,18 +1207,18 @@ def validate(DOC=None,FILENAME=None,XMLSchema=None):
     except etree.XMLSchemaParseError, details:
         ################# Debug start #######################
         # Write XMLSchema to debugfile
-        debugfile = '/ESSArch/log/debug/XMLSchema_1_%s.xsd' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        debugfile = '/var/log/ESSArch/log/debug/XMLSchema_1_%s.xsd' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         errno_ignore,why_ignore = writeToFile(RootEL_schema,debugfile)
         # Write XMLdoc to debugfile
-        debugfile = '/ESSArch/log/debug/XML_DOC_1_%s.xml' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        debugfile = '/var/log/ESSArch/log/debug/XML_DOC_1_%s.xml' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         errno_ignore,why_ignore = writeToFile(DOC,debugfile)
         # Write getSchemaLocation to debugfile
-        debugfile = '/ESSArch/log/debug/getSchemaLocation_1_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        debugfile = '/var/log/ESSArch/log/debug/getSchemaLocation_1_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         debugfile_object = open(debugfile, 'w')
         debugfile_object.write(str(SchemaLocations))
         debugfile_object.close()
         # Write ParseError_details to debugfile
-        debugfile = '/ESSArch/log/debug/ParseError_details_1_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        debugfile = '/var/log/ESSArch/log/debug/ParseError_details_1_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         debugfile_object = open(debugfile, 'w')
         debugfile_object.write(str(details))
         debugfile_object.close()
@@ -1226,18 +1229,18 @@ def validate(DOC=None,FILENAME=None,XMLSchema=None):
         except etree.XMLSchemaParseError, details:
             ################# Debug start #######################
             # Write XMLSchema to debugfile
-            debugfile = '/ESSArch/log/debug/XMLSchema_2_%s.xsd' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            debugfile = '/var/log/ESSArch/log/debug/XMLSchema_2_%s.xsd' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             errno_ignore,why_ignore = writeToFile(RootEL_schema,debugfile)
             # Write XMLdoc to debugfile
-            debugfile = '/ESSArch/log/debug/XML_DOC_2_%s.xml' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            debugfile = '/var/log/ESSArch/log/debug/XML_DOC_2_%s.xml' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             errno_ignore,why_ignore = writeToFile(DOC,debugfile)
             # Write getSchemaLocation to debugfile
-            debugfile = '/ESSArch/log/debug/getSchemaLocation_2_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            debugfile = '/var/log/ESSArch/log/debug/getSchemaLocation_2_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             debugfile_object = open(debugfile, 'w')
             debugfile_object.write(str(SchemaLocations))
             debugfile_object.close()
             # Write ParseError_details to debugfile
-            debugfile = '/ESSArch/log/debug/ParseError_details_2_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            debugfile = '/var/log/ESSArch/log/debug/ParseError_details_2_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             debugfile_object = open(debugfile, 'w')
             debugfile_object.write(str(details))
             debugfile_object.close()
@@ -1248,18 +1251,18 @@ def validate(DOC=None,FILENAME=None,XMLSchema=None):
             except etree.XMLSchemaParseError, details:
                 ################# Debug start #######################
                 # Write XMLSchema to debugfile
-                debugfile = '/ESSArch/log/debug/XMLSchema_3_%s.xsd' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                debugfile = '/var/log/ESSArch/log/debug/XMLSchema_3_%s.xsd' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                 errno_ignore,why_ignore = writeToFile(RootEL_schema,debugfile)
                 # Write XMLdoc to debugfile
-                debugfile = '/ESSArch/log/debug/XML_DOC_3_%s.xml' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                debugfile = '/var/log/ESSArch/log/debug/XML_DOC_3_%s.xml' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                 errno_ignore,why_ignore = writeToFile(DOC,debugfile)
                 # Write getSchemaLocation to debugfile
-                debugfile = '/ESSArch/log/debug/getSchemaLocation_3_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                debugfile = '/var/log/ESSArch/log/debug/getSchemaLocation_3_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                 debugfile_object = open(debugfile, 'w')
                 debugfile_object.write(str(SchemaLocations))
                 debugfile_object.close()
                 # Write ParseError_details to debugfile
-                debugfile = '/ESSArch/log/debug/ParseError_details_3_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                debugfile = '/var/log/ESSArch/log/debug/ParseError_details_3_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                 debugfile_object = open(debugfile, 'w')
                 debugfile_object.write(str(details))
                 debugfile_object.close()
@@ -1274,7 +1277,7 @@ def validate(DOC=None,FILENAME=None,XMLSchema=None):
 
         ################# Debug start #######################
         # Write xmlshcme.error_log to debugfile
-        debugfile = '/ESSArch/log/debug/validate_error_log_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        debugfile = '/var/log/ESSArch/log/debug/validate_error_log_%s.log' % datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         debugfile_object = open(debugfile, 'w')
         for log_entry in error_log:
             debugfile_object.write(str(log_entry)+'\n')

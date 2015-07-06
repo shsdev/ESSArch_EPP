@@ -27,6 +27,8 @@ __author__ = "$Author$"
 import re, os
 __version__ = '%s.%s' % (__majorversion__,re.sub('[\D]', '',__revision__))
 
+import pdb
+
 #############################################################################
 # Settings for ESSArch Preservation Platform.
 
@@ -35,6 +37,14 @@ DEBUG = True
 TEMPLATE_DEBUG = False
 
 SITE_ROOT = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..').replace('\\', '/')
+
+# import sys
+# BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# print "================================================================================="
+# print SITE_ROOT
+# print BASE_DIR
+# print "================================================================================="
+#sys.path.insert(0, os.path.join(BASE_DIR, "workers"))
 
 ALLOWED_HOSTS = ['*']
 
@@ -49,27 +59,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         #'STORAGE_ENGINE': 'MyISAM',           # STORAGE_ENGINE for MySQL database tables, 'MyISAM' or 'INNODB'
-        'NAME': 'essarch',                    # Or path to database file if using sqlite3.
-        'USER': 'arkiv',                      # Not used with sqlite3.
-        'PASSWORD': 'password',               # Not used with sqlite3.
+        'NAME': 'eark',                    # Or path to database file if using sqlite3.
+        'USER': 'root',                      # Not used with sqlite3.
+        'PASSWORD': '<MYSQLROOTPASSWORD>',               # Not used with sqlite3.
         'HOST': '',                           # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                           # Set to empty string for default. Not used with sqlite3.
         # This options for storage_engine have to be set for "south migrate" to work.
         'OPTIONS': {
            "init_command": "SET storage_engine=MyISAM",
         }
-    }
-}
-
-DATABASES_AIS = {
-    'default': {
-        'DRIVER': 'SQL Server', # must match entry in /etc/unixODBC/odbcinst.ini
-        'NAME': 'Arkis2Balder',
-        'USER': 'RA2B_ES21rcH',
-        'PASSWORD': 'x',
-        'HOST': '10.100.9.2',                        
-        'PORT': '1433',
-        'TDS': '7.2',
     }
 }
 
@@ -85,7 +83,7 @@ SERVER_EMAIL = 'ESSArch@localhost' # from
 EMAIL_SUBJECT_PREFIX = "[ESSArch] "
 
 # django-log-files-viewer
-#LOG_FILES_DIR = '/ESSArch/log'
+#LOG_FILES_DIR = '/var/log/ESSArch/log'
 #LOG_FILES_RE = '(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\s\[(?P<type>[A-Z]+)\]\s(?P<message>.+)'
 #LOG_FILES_RE = '(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\s(?P<type>[A-Z]+)\s(?P<message>.+)'
 
@@ -243,7 +241,7 @@ INSTALLED_APPS = (
     #'grappelli',
     'django.contrib.admin',
     # 'django.contrib.admindocs',
-    'south',
+    #'south',
     'djcelery',
     #'django_tables2',
     'djangojs',
@@ -273,7 +271,7 @@ from datetime import timedelta
 process_list=["IOEngine.pyc", "FTPServer.pyc", "AccessEngine.pyc","ESSlogging.pyc", "db_sync_ais.pyc", "TLD.pyc", "AIPPurge.pyc", 
                     "AIPWriter.pyc", "SIPRemove.pyc", "AIPValidate.pyc", "AIPChecksum.pyc", "AIPCreator.pyc","SIPValidateFormat.pyc",
                     "SIPValidateApproval.pyc","SIPValidateAIS.pyc","SIPReceiver.pyc"]
-WORKERS_ROOT = '/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP/workers'
+WORKERS_ROOT = '/home/shs/Development/EARK/ESSArch_EPP/ESSArch_EPP/workers'
 for i,p in enumerate(process_list):
     process_list[i]=os.path.join(WORKERS_ROOT,p)
 
@@ -289,7 +287,7 @@ CELERYBEAT_SCHEDULE = {
         "task": "monitoring.tasks.CheckProcFilesTask",
         "schedule": timedelta(seconds=60),
         "kwargs": {
-                'proc_log_path':"/ESSArch/log/proc",
+                'proc_log_path':"/var/log/ESSArch/log/proc",
         }
     },
     "CheckStorageMediums-everyday-07:00": {
@@ -339,7 +337,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/ESSArch_request.log',
+            'filename': '/var/log/ESSArch/log/ESSArch_request.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -348,7 +346,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/ESSArch_db.log',
+            'filename': '/var/log/ESSArch/log/ESSArch_db.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -357,7 +355,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/ESSArch.log',
+            'filename': '/var/log/ESSArch/log/ESSArch.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -366,7 +364,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/controlarea.log',
+            'filename': '/var/log/ESSArch/log/controlarea.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -375,7 +373,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/storagemaintenance.log',
+            'filename': '/var/log/ESSArch/log/storagemaintenance.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },
@@ -384,7 +382,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/storageLogistics.log',
+            'filename': '/var/log/ESSArch/log/storageLogistics.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },
@@ -393,7 +391,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/administration.log',
+            'filename': '/var/log/ESSArch/log/administration.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },
@@ -402,7 +400,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/monitoring.log',
+            'filename': '/var/log/ESSArch/log/monitoring.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },

@@ -50,11 +50,11 @@ class PROC:
             ESSDB.DB().action('ESSProc','UPD',('alarm',1),('id',id))
             self.ProcName = procrow[0]
             self.ProcPath = procrow[1]
-            self.ProcStdOut = open('/ESSArch/log/proc/' + self.ProcName + '.log','a')
+            self.ProcStdOut = open('/var/log/ESSArch/log/proc/' + self.ProcName + '.log','a')
             if self.ProcName == 'db_sync_ais' or self.ProcName == 'storageLogistics' or self.ProcName == 'ESSlogging':
-                self.cmd = subprocess.Popen(["/ESSArch/pd/python/bin/python",self.ProcPath,"-p","&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
+                self.cmd = subprocess.Popen(["/home/shs/Development/Envs/sac/bin/python",self.ProcPath,"-p","&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
             else:
-                self.cmd = subprocess.Popen(["/ESSArch/pd/python/bin/python",self.ProcPath,"&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
+                self.cmd = subprocess.Popen(["/home/shs/Development/Envs/sac/bin/python",self.ProcPath,"&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
             ESSDB.DB().action('ESSProc','UPD',('Status','1','Run','1','PID',self.cmd.pid),('id',id))
         ############### Stop #################
         if action == 'Stop':
@@ -519,7 +519,7 @@ class Check:
                 break
         f.close()
         # List the tarfile and sum the tifs size
-        errortarout = open('/ESSArch/log/tarcheckerror.log','a')
+        errortarout = open('/var/log/ESSArch/log/tarcheckerror.log','a')
         self.tar = subprocess.Popen(["tar tvf " + tarfile + " | awk {'print $3'}"], shell=True, stdout=subprocess.PIPE, stderr=errortarout)
         self.tarout = self.tar.communicate()
         errortarout.close()
@@ -587,7 +587,7 @@ class Check:
         self.TotalSize = 0
         self.TotalNum = 0
         try:
-            errortarout = open('/ESSArch/log/tarcheckerror.log','a')
+            errortarout = open('/var/log/ESSArch/log/tarcheckerror.log','a')
             self.cmd = subprocess.Popen(['tar', 'tvf', tarfile], stdout=subprocess.PIPE, stderr=errortarout)
             self.tarout = self.cmd.communicate()
             errortarout.close()
@@ -597,7 +597,7 @@ class Check:
                         self.TotalSize += int(self.i.split()[2])
                         self.TotalNum += 1
             else:
-                return [0,0],10,'For more information check /ESSArch/log/tarcheckerror.log'
+                return [0,0],10,'For more information check /var/log/ESSArch/log/tarcheckerror.log'
         except IOError, self.detail:
             return [0,0],20,str(self.detail)
         else:
@@ -2020,7 +2020,7 @@ class Robot:
                         self.xml_format.setAttribute("drivemanufacture", str(t_type))
                         self.xml_label.appendChild(self.xml_format)
                         # Write  tapelabel to file
-                        self.xml_labelfilepath = '/ESSArch/log/label/'+self.t_id+'_label.xml'
+                        self.xml_labelfilepath = '/var/log/ESSArch/log/label/'+self.t_id+'_label.xml'
                         self.xml_labelfile = open(self.xml_labelfilepath, "w")
                         self.xml_labeldoc.writexml(self.xml_labelfile,addindent="    ",newl="\n")
                         self.xml_labelfile.close()

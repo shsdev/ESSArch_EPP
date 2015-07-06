@@ -13,22 +13,25 @@
 # Short-Description: ESSArch worker daemons
 ### END INIT INFO
 
-PythonBin=/ESSArch/pd/python/bin/python2.7
-ESSArchStopStart=/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP/workers/ESSArchStopStart.pyc
+export DJANGO_SETTINGS_MODULE=config.settings_dev
+
+PythonBin=/home/shs/Development/Envs/sac/bin/python
+ESSArchStopStart=/home/shs/Development/EARK/ESSArch_EPP/ESSArch_EPP/workers/ESSArchStopStart.pyc
 test -x $PythonBin || exit 5
-LOCK_FILE=/var/lock/subsys/essarch
+LOCK_FILE=/var/lock/essarch
+USER=shs
 
 case "$1" in
     start)
         echo "Starting ESSArch"
-        su - arch -c "$PythonBin $ESSArchStopStart -s"
+        su - $USER -c "$PythonBin $ESSArchStopStart -s"
         if [ -n "$LOCK_FILE" ] ; then
             touch $LOCK_FILE
         fi        
     ;;
     stop)
         echo "Shutting down ESSArch"
-        su - arch -c "$PythonBin $ESSArchStopStart -q" 
+        su - $USER -c "$PythonBin $ESSArchStopStart -q" 
         if [ -n "$LOCK_FILE" ] ; then
             rm -f $LOCK_FILE
         fi
@@ -38,12 +41,12 @@ case "$1" in
     ;;
     restart)
         echo "Shutting down ESSArch"
-        su - arch -c "$PythonBin $ESSArchStopStart -q" 
+        su - $USER -c "$PythonBin $ESSArchStopStart -q" 
         if [ -n "$LOCK_FILE" ] ; then
             rm -f $LOCK_FILE
         fi
         echo "Starting ESSArch"
-        su - arch -c "$PythonBin $ESSArchStopStart -s"
+        su - $USER -c "$PythonBin $ESSArchStopStart -s"
         if [ -n "$LOCK_FILE" ] ; then
             touch $LOCK_FILE
         fi                

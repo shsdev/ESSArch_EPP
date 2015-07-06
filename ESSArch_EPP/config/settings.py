@@ -292,7 +292,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/ESSArch_request.log',
+            'filename': '/var/log/ESSArch/log/ESSArch_request.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -301,7 +301,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/ESSArch_db.log',
+            'filename': '/var/log/ESSArch/log/ESSArch_db.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -310,7 +310,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/ESSArch.log',
+            'filename': '/var/log/ESSArch/log/ESSArch.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -319,7 +319,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/controlarea.log',
+            'filename': '/var/log/ESSArch/log/controlarea.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 5,
         },
@@ -328,7 +328,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/storagemaintenance.log',
+            'filename': '/var/log/ESSArch/log/storagemaintenance.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },
@@ -337,7 +337,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/storageLogistics.log',
+            'filename': '/var/log/ESSArch/log/storageLogistics.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },
@@ -346,7 +346,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/administration.log',
+            'filename': '/var/log/ESSArch/log/administration.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },
@@ -355,7 +355,7 @@ LOGGING = {
             #'filters': ['require_debug_false'],
             'class' : 'logging.handlers.RotatingFileHandler',
             'formatter': 'verbose',
-            'filename': '/ESSArch/log/monitoring.log',
+            'filename': '/var/log/ESSArch/log/monitoring.log',
             'maxBytes': 1024*1024*5, # 5MB
             'backupCount': 1000,
         },

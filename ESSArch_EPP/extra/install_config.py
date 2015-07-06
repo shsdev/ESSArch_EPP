@@ -28,6 +28,13 @@ __author__ = "$Author$"
 import re
 __version__ = '%s.%s' % (__majorversion__,re.sub('[\D]', '',__revision__))
 
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_dev')
+
+import django
+django.setup()
+
 # own models etc
 from configuration.models import Parameter, LogEvent, SchemaProfile, IPParameter, Path, ESSConfig, ESSArchPolicy, ESSProc, DefaultValue
 from essarch.models import eventType_codes, robotdrives, storageMedium
@@ -40,10 +47,10 @@ site_name = u'Site-X' # RA-OSLO , Marieberg, MKC, SVAR, HLA
 medium_location = u'Media_%s' % site_name # IT_OSLO, IT_MARIEBERG
 site_profile = "SE" # SE or NO
 
-install_site = u'ESSArch_%s' % site_name 
+install_site = u'ESSArch_%s' % site_name
 
 def createdefaultusers(): # default users, groups and permissions
-    
+
     admingroup, created = Group.objects.get_or_create(name='Admin')
     admingroup.permissions.clear()
     usergroup, created = Group.objects.get_or_create(name='User')
@@ -51,11 +58,11 @@ def createdefaultusers(): # default users, groups and permissions
     sysgroup, created = Group.objects.get_or_create(name='SysAdmin')
     sysgroup.permissions.clear()
 
-    # controlarea permissions 
+    # controlarea permissions
     permission_list = ['add_permission','change_permission','delete_permission',
                        'CheckinFromReception','CheckoutToWork','CheckinFromWork',
                        'CheckoutToGate','CheckinFromGate','DiffCheck','PreserveIP']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
                                                     content_type__app_label='controlarea',
                                                     content_type__model='permission').all()
     for permission_obj in permission_obj_list:
@@ -63,7 +70,7 @@ def createdefaultusers(): # default users, groups and permissions
         usergroup.permissions.add(permission_obj)
 
     permission_list = ['add_controlarea','change_controlarea','delete_controlarea','list_controlarea']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
                                                     content_type__app_label='controlarea',
                                                     content_type__model='controlarea').all()
     for permission_obj in permission_obj_list:
@@ -72,7 +79,7 @@ def createdefaultusers(): # default users, groups and permissions
 
     # reports permissions
     permission_list = ['add_reports','change_reports','delete_reports','list_reports']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
                                                     content_type__app_label='reports',
                                                     content_type__model='reports').all()
     for permission_obj in permission_obj_list:
@@ -95,8 +102,8 @@ def createdefaultusers(): # default users, groups and permissions
 
     # robot permissions
     permission_list = ['add_robot','change_robot','delete_robot','list_robot']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='essarch', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='essarch',
                                                     content_type__model='robot').all()
     for permission_obj in permission_obj_list:
         admingroup.permissions.add(permission_obj)
@@ -104,8 +111,8 @@ def createdefaultusers(): # default users, groups and permissions
 
     # storage permissions
     permission_list = ['add_storage','change_storage','delete_storage','list_storage']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='essarch', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='essarch',
                                                     content_type__model='storage').all()
     for permission_obj in permission_obj_list:
         admingroup.permissions.add(permission_obj)
@@ -113,8 +120,8 @@ def createdefaultusers(): # default users, groups and permissions
 
     # storageMedium permissions
     permission_list = ['add_storageMedium','change_storageMedium','delete_storageMedium','list_storageMedium']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='essarch', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='essarch',
                                                     content_type__model='storageMedium').all()
     for permission_obj in permission_obj_list:
         admingroup.permissions.add(permission_obj)
@@ -122,7 +129,7 @@ def createdefaultusers(): # default users, groups and permissions
 
     # defaultvalue permissions
     permission_list = ['add_defaultvalue','change_defaultvalue','delete_defaultvalue']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
                                                     content_type__app_label='configuration',
                                                     content_type__model='defaultvalue').all()
     for permission_obj in permission_obj_list:
@@ -205,8 +212,8 @@ def createdefaultusers(): # default users, groups and permissions
 
     # essconfig permissions
     permission_list = ['add_essconfig','change_essconfig','delete_essconfig']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='configuration', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='configuration',
                                                     content_type__model='essconfig').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
@@ -214,55 +221,55 @@ def createdefaultusers(): # default users, groups and permissions
 
     # essproc permissions
     permission_list = ['add_essproc','change_essproc','delete_essproc']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='configuration', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='configuration',
                                                     content_type__model='essproc').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
 
     # monitoring permissions
     permission_list = ['add_monitoringobject','change_monitoringobject','delete_monitoringobject','list_monitoringobject']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='monitoring', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='monitoring',
                                                     content_type__model='monitoringobject').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
 
-    
+
     permission_list = ['add_log','change_log','delete_log']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='monitoring', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='monitoring',
                                                     content_type__model='log').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
-    
+
 
     # djcelery permissions
     permission_list = ['add_intervalschedule','change_intervalschedule','delete_intervalschedule']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='djcelery', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='djcelery',
                                                     content_type__model='intervalschedule').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
 
     permission_list = ['add_crontabschedule','change_crontabschedule','delete_crontabschedule']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='djcelery', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='djcelery',
                                                     content_type__model='crontabschedule').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
 
     permission_list = ['add_periodictask','change_periodictask','delete_periodictask']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='djcelery', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='djcelery',
                                                     content_type__model='periodictask').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
 
     # logfileviewer permissions
     permission_list = ['add_logfile','change_logfile','delete_logfile']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='logfileviewer', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='logfileviewer',
                                                     content_type__model='logfile').all()
     for permission_obj in permission_obj_list:
         sysgroup.permissions.add(permission_obj)
@@ -270,8 +277,8 @@ def createdefaultusers(): # default users, groups and permissions
 
     # migrationqueue permissions
     permission_list = ['add_migrationqueue','change_migrationqueue','delete_migrationqueue','list_migrationqueue']
-    permission_obj_list = Permission.objects.filter(codename__in=permission_list, 
-                                                    content_type__app_label='essarch', 
+    permission_obj_list = Permission.objects.filter(codename__in=permission_list,
+                                                    content_type__app_label='essarch',
                                                     content_type__model='migrationqueue').all()
     for permission_obj in permission_obj_list:
         admingroup.permissions.add(permission_obj)
@@ -319,11 +326,11 @@ def createdefaultusers(): # default users, groups and permissions
         myuser.save()
 
     return 0
-    
+
 
 def installdefaultpaths(): # default paths
-    
-    # First remove all existing data 
+
+    # First remove all existing data
     Path.objects.all().delete()
 
     # create dictionaries for zone
@@ -356,12 +363,12 @@ def installdefaultpaths(): # default paths
             le.save()
         except:
             pass
-    
-    return 0 
-    
+
+    return 0
+
 def installogdefaults(): # default logevents
-    
-    # First remove all existing data 
+
+    # First remove all existing data
     LogEvent.objects.all().delete()
 
     # create logevents dictionaries per zone
@@ -379,14 +386,14 @@ def installogdefaults(): # default logevents
             'Change of metadata':'22500',
             'Letter to creator':'22600',
             }
-        
+
     # set default logevents according to zone
     dct.update(dct3)
-    
+
     # if zone is incorrect
-    if dct is None: 
+    if dct is None:
         return 1
-    
+
     # create according to model with two fields
     for key in dct :
         print >> sys.stderr, "**", key
@@ -400,8 +407,8 @@ def installogdefaults(): # default logevents
 
 
 def installdefaultschemaprofiles(): # default schema profiles for Sweden and Norway
-    
-    # First remove all existing data 
+
+    # First remove all existing data
     SchemaProfile.objects.all().delete()
 
     if site_profile == "SE" :
@@ -421,7 +428,7 @@ def installdefaultschemaprofiles(): # default schema profiles for Sweden and Nor
                'addml_namespace':'http://xml.ra.se/addml',
                'addml_schemalocation':'http://xml.ra.se/addml/ra_addml.xsd',
                'xhtml_namespace':'http://www.w3.org/1999/xhtml',
-               'xhtml_schemalocation':'http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd'      
+               'xhtml_schemalocation':'http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd'
                }
 
     if site_profile == "NO" :
@@ -442,7 +449,7 @@ def installdefaultschemaprofiles(): # default schema profiles for Sweden and Nor
                'addml_namespace': 'http://www.arkivverket.no/addml',
                'addml_schemalocation': 'http://xml.ra.se/addml/ra_addml.xsd',
                'xhtml_namespace': 'http://www.w3.org/1999/xhtml',
-               'xhtml_schemalocation': 'http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd'      
+               'xhtml_schemalocation': 'http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd'
                }
 
     # create according to model with two fields
@@ -453,7 +460,7 @@ def installdefaultschemaprofiles(): # default schema profiles for Sweden and Nor
             le.save()
         except:
             pass
-    
+
     return 0
 ######################
 def installdefaulteventType_codes(): # default eventType_codes
@@ -573,7 +580,7 @@ def installdefaultrobotdrives(): # default robotdrives
             robotdrives_obj.save()
 
 def installdefaultstorageMedium(): # default storageMedium
-       
+
     timestamp = datetime.datetime.now().isoformat()
 
     if not storageMedium.objects.filter(storageMediumID=u'disk').exists():
@@ -726,22 +733,25 @@ def installdefaultESSArchPolicy(): # default ESSArchPolicy
 
 def installdefaultESSProc(): # default ESSProc
 
-    ESSProc_list=(('1','SIPReceiver','/ESSArch/bin/SIPReceiver.pyc','/ESSArch/log/SIPReceiver.log',1,30,0,0,0,0),
-                   ('3','SIPValidateAIS','/ESSArch/bin/SIPValidateAIS.pyc','/ESSArch/log/SIPValidateAIS.log',1,5,0,0,0,0),
-                   ('4','SIPValidateApproval','/ESSArch/bin/SIPValidateApproval.pyc','/ESSArch/log/SIPValidateApproval.log',1,5,0,0,0,0),
-                   ('5','SIPValidateFormat','/ESSArch/bin/SIPValidateFormat.pyc','/ESSArch/log/SIPValidateFormat.log',1,5,0,0,0,0),
-                   ('6','AIPCreator','/ESSArch/bin/AIPCreator.pyc','/ESSArch/log/AIPCreator.log',1,5,0,0,0,0),
-                   ('7','AIPChecksum','/ESSArch/bin/AIPChecksum.pyc','/ESSArch/log/AIPChecksum.log',1,5,0,0,0,0),
-                   ('8','AIPValidate','/ESSArch/bin/AIPValidate.pyc','/ESSArch/log/AIPValidate.log',1,5,0,0,0,0),
-                   ('9','SIPRemove','/ESSArch/bin/SIPRemove.pyc','/ESSArch/log/SIPRemove.log',1,5,0,0,0,0),
-                   ('10','AIPWriter','/ESSArch/bin/AIPWriter.pyc','/ESSArch/log/AIPWriter.log',1,15,0,0,0,0),
-                   ('11','AIPPurge','/ESSArch/bin/AIPPurge.pyc','/ESSArch/log/AIPPurge.log',1,5,0,0,0,0),
-                   ('12','TLD','/ESSArch/bin/TLD.pyc','/ESSArch/log/TLD.log',2,5,0,0,0,0),
-                   ('13','IOEngine','/ESSArch/bin/IOEngine.pyc','/ESSArch/log/IOEngine.log',8,5,0,0,0,0),
-                   ('14','db_sync_ais','/ESSArch/bin/db_sync_ais.pyc','/ESSArch/log/db_sync_ais.log',1,10,0,0,0,0),
-                   ('16','ESSlogging','/ESSArch/bin/ESSlogging.pyc','/ESSArch/log/ESSlogging.log',2,5,0,0,0,0),
-                   ('17','AccessEngine','/ESSArch/bin/AccessEngine.pyc','/ESSArch/log/AccessEngine.log',3,5,0,0,0,0),
-                   ('18','FTPServer','/ESSArch/bin/FTPServer.pyc','/ESSArch/log/FTPServer.log',2,5,0,0,0,0),
+    workers_dir = os.environ['WORKERS_DIR']
+    log_dir = os.environ['LOG_DIR']
+
+    ESSProc_list=(('1','SIPReceiver','%s/SIPReceiver.pyc' % workers_dir,'%s/SIPReceiver.log' % log_dir,1,30,0,0,0,0),
+                   ('3','SIPValidateAIS','%s/SIPValidateAIS.pyc' % workers_dir,'%s/SIPValidateAIS.log' % log_dir,1,5,0,0,0,0),
+                   ('4','SIPValidateApproval','%s/SIPValidateApproval.pyc' % workers_dir,'%s/SIPValidateApproval.log' % log_dir,1,5,0,0,0,0),
+                   ('5','SIPValidateFormat','%s/SIPValidateFormat.pyc' % workers_dir,'%s/SIPValidateFormat.log' % log_dir,1,5,0,0,0,0),
+                   ('6','AIPCreator','%s/AIPCreator.pyc' % workers_dir,'%s/AIPCreator.log' % log_dir,1,5,0,0,0,0),
+                   ('7','AIPChecksum','%s/AIPChecksum.pyc' % workers_dir,'%s/AIPChecksum.log' % log_dir,1,5,0,0,0,0),
+                   ('8','AIPValidate','%s/AIPValidate.pyc' % workers_dir,'%s/AIPValidate.log' % log_dir,1,5,0,0,0,0),
+                   ('9','SIPRemove','%s/SIPRemove.pyc' % workers_dir,'%s/SIPRemove.log' % log_dir,1,5,0,0,0,0),
+                   ('10','AIPWriter','%s/AIPWriter.pyc' % workers_dir,'%s/AIPWriter.log' % log_dir,1,15,0,0,0,0),
+                   ('11','AIPPurge','%s/AIPPurge.pyc' % workers_dir,'%s/AIPPurge.log' % log_dir,1,5,0,0,0,0),
+                   ('12','TLD','%s/TLD.pyc' % workers_dir,'%s/TLD.log' % log_dir,2,5,0,0,0,0),
+                   ('13','IOEngine','%s/IOEngine.pyc' % workers_dir,'%s/IOEngine.log' % log_dir,8,5,0,0,0,0),
+                   ('14','db_sync_ais','%s/db_sync_ais.pyc' % workers_dir,'%s/db_sync_ais.log' % log_dir,1,10,0,0,0,0),
+                   ('16','ESSlogging','%s/ESSlogging.pyc' % workers_dir,'%s/ESSlogging.log' % log_dir,2,5,0,0,0,0),
+                   ('17','AccessEngine','%s/AccessEngine.pyc' % workers_dir,'%s/AccessEngine.log' % log_dir,3,5,0,0,0,0),
+                   ('18','FTPServer','%s/FTPServer.pyc' % workers_dir,'%s/FTPServer.log' % log_dir,2,5,0,0,0,0),
     )
     for row in ESSProc_list:
         if not ESSProc.objects.filter(Name=row[1]).exists():
@@ -776,8 +786,8 @@ def installdefaultdefaultvalues(): # default default values
     return 0
 
 def installdefaultparameters(): # default config parameters
-    
-    # First remove all data 
+
+    # First remove all data
     Parameter.objects.all().delete()
 
     # set default parameters according to zone
@@ -813,7 +823,7 @@ def installdefaultparameters(): # default config parameters
             le.save()
         except:
             pass
-    
+
     # install default configuration
     createdefaultusers()             # default users, groups and permissions
     installdefaultpaths()            # default paths
@@ -827,15 +837,15 @@ def installdefaultparameters(): # default config parameters
     installdefaultstorageMedium()    # default storageMedium
     installdefaultESSArchPolicy()    # default ESSArchPolicy
     installdefaultESSProc()          # default ESSProc
-    
+
     return 0
 
 
 def installIPParameter():  # default metadata for IP
-    
-    # First remove all data 
+
+    # First remove all data
     IPParameter.objects.all().delete()
-    
+
     # create dictionary for IP elements
     dct = {
            'objid':'UUID:550e8400-e29b-41d4-a716-446655440004',
@@ -893,14 +903,14 @@ def installIPParameter():  # default metadata for IP
     #print dict1.values()
     #print dict1.items()
     #print tt3.items()
-    
+
     #new_dict = {}
     #new_lst = []
-    
+
     #new_dict.update(dict2)
     #new_dict.update(dict3)
-    #print new_dict.items() 
-    
+    #print new_dict.items()
+
     # create according to model with many fields
     IPParameter.objects.create(**dct)
     #IPMetadata.objects.create(**dct1)  # create from dictionary
@@ -910,3 +920,5 @@ def installIPParameter():  # default metadata for IP
 
 if __name__ == '__main__':
     installdefaultparameters()
+
+

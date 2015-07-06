@@ -29,8 +29,16 @@
 #
 # You can then configure this by manipulating /etc/default/little-worker.
 #
-LOCK_FILE=/var/lock/subsys/celeryd
+LOCK_FILE=/var/lock/celeryd
 VERSION=10.0
+
+export VIRT_PYTHON_PATH=/home/shs/Development/Envs/sac
+export PATH=${VIRT_PYTHON_PATH}/bin:$PATH:/usr/sbin
+export EPPROOT=/home/shs/Development/EARK/ESSArch_EPP
+export EPPMOD=${EPPROOT}/ESSArch_EPP
+export PYTHONPATH=${EPPROOT}:${EPPMOD}:${VIRT_PYTHON_PATH}/lib/python2.7/site-packages:${EPPMOD}/workers:${EPPMOD}/config:$PYTHONPATH
+export CELERY_USER='shs'
+
 echo "celery init v${VERSION}."
 if [ $(id -u) -ne 0 ]; then
     echo "Error: This program can only be used by the root user."
@@ -47,13 +55,10 @@ else
     SCRIPT_FILE="$0"
 fi
 
-export LD_LIBRARY_PATH=/ESSArch/pd/python/lib:/ESSArch/pd/libxslt/lib:/ESSArch/pd/libxml/lib:/ESSArch/pd/libmpeg2/lib:/usr/local/lib
-#export DJANGO_SETTINGS_MODULE=config.settings
-export PYTHONPATH=/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP:/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP/workers:/ESSArch/config
 
 SCRIPT_NAME="$(basename "$SCRIPT_FILE")"
 
-DEFAULT_USER="celery"
+DEFAULT_USER=${CELERY_USER}
 DEFAULT_PID_FILE="/var/run/celery/%n.pid"
 DEFAULT_LOG_FILE="/var/log/celery/%n.log"
 DEFAULT_LOG_LEVEL="INFO"
@@ -61,7 +66,7 @@ DEFAULT_NODES="celery"
 DEFAULT_CELERYD="-m celery worker --detach"
 
 #CELERY_DEFAULTS=${CELERY_DEFAULTS:-"/etc/default/${SCRIPT_NAME}"}
-CELERY_DEFAULTS=${CELERY_DEFAULTS:-"/ESSArch/config/${SCRIPT_NAME}"}
+CELERY_DEFAULTS=${CELERY_DEFAULTS:-"${EPPMOD}/config/${SCRIPT_NAME}"}
 
 # Make sure executable configuration script is owned by root
 _config_sanity() {

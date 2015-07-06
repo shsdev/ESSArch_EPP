@@ -938,7 +938,7 @@ if __name__ == '__main__':
     if options.process:
         LogFile,Time,Status,Run = ESSDB.DB().action('ESSProc','GET',('LogFile','Time','Status','Run'),('Name',ProcName))[0]
     else:
-        LogFile = '/ESSArch/log/db_sync/ais.log'
+        LogFile = '/var/log/ESSArch/log/db_sync/ais.log'
     ##########################
     # Log format
     essFormatter1 = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s','%d %b %Y %H:%M:%S')

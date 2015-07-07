@@ -43,12 +43,12 @@ DATABASES_dict = getattr(settings,'DATABASES',{})
 if DATABASES_dict:
     default_db = DATABASES_dict.get('default',{})
     if default_db.get('ENGINE','').find('mysql') > -1:
-        DBuser = default_db.get('USER','root')
-        DBpasswd = default_db.get('PASSWORD','<MYSQLROOTPASSWORD>')
+        DBuser = default_db.get('USER','arkiv')
+        DBpasswd = default_db.get('PASSWORD','arkiv')
         DBname = default_db.get('NAME','eark')
 if not DBuser:
-    DBuser = 'root'
-    DBpasswd = '<MYSQLROOTPASSWORD>'
+    DBuser = 'arkiv'
+    DBpasswd = 'arkiv'
     DBname = 'eark'
 
 Debug = 0

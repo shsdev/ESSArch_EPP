@@ -41,9 +41,19 @@ else
 fi
 SCRIPT_NAME="$(basename "$SCRIPT_FILE")"
 
-export LD_LIBRARY_PATH=/ESSArch/pd/python/lib:/ESSArch/pd/libxslt/lib:/ESSArch/pd/libxml/lib:/ESSArch/pd/libmpeg2/lib:/usr/local/lib
+export VIRT_PYTHON_PATH=/opt/PyVirtEnvs/epp
+export PATH=${VIRT_PYTHON_PATH}/bin:$PATH:/usr/sbin
+export EPPROOT=/opt/python_wsgi_apps/ESSArch_EPP
+export EPPMOD=${EPPROOT}/ESSArch_EPP
+export PYTHONPATH=${EPPROOT}:${EPPMOD}:${VIRT_PYTHON_PATH}/lib/python2.7/site-packages:${EPPMOD}/workers:${EPPMOD}/config:$PYTHONPATH
+export CELERYBEAT_USER='shs'
+
+export LD_LIBRARY_PATH=${VIRT_PYTHON_PATH}/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
 #export DJANGO_SETTINGS_MODULE=config.settings
-export PYTHONPATH=/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP:/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP/workers:/ESSArch/config
+
+export PYTHONPATH=${EPPROOT}:${EPPMOD}:${VIRT_PYTHON_PATH}/lib/python2.7/site-packages:${EPPMOD}/workers:${EPPMOD}/config:$PYTHONPATH
+#export PYTHONPATH=/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP:/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP/workers:/ESSArch/config
 
 # /etc/init.d/celerybeat: start and stop the celery periodic task scheduler daemon.
 
@@ -98,10 +108,10 @@ scripts=""
 #    . /etc/default/celeryd
 #fi
 
-if test -f /ESSArch/config/celeryd; then
-    scripts="/ESSArch/config/celeryd"
+if test -f ${EPPMOD}/config/celeryd; then
+    scripts="${EPPMOD}/config/celeryd"
     #_config_sanity /ESSArch/app/config/celeryd
-    . /ESSArch/config/celeryd
+    . ${EPPMOD}/config/celeryd
 fi
 
 
@@ -114,8 +124,8 @@ fi
 
 echo "Using configuration: $scripts"
 
-CELERY_BIN=${CELERY_BIN:-"celery"}
-DEFAULT_USER="celery"
+CELERY_BIN=${CELERY_BIN:-"${VIRT_PYTHON_PATH}/bin/celery"}
+DEFAULT_USER="arch"
 DEFAULT_PID_FILE="/var/run/celery/beat.pid"
 DEFAULT_LOG_FILE="/var/log/celery/beat.log"
 DEFAULT_LOG_LEVEL="INFO"

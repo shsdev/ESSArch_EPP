@@ -32,9 +32,9 @@
 LOCK_FILE=/var/lock/celeryd
 VERSION=10.0
 
-export VIRT_PYTHON_PATH=/home/shs/Development/Envs/sac
+export VIRT_PYTHON_PATH=/opt/PyVirtEnvs/epp
 export PATH=${VIRT_PYTHON_PATH}/bin:$PATH:/usr/sbin
-export EPPROOT=/home/shs/Development/EARK/ESSArch_EPP
+export EPPROOT=/opt/python_wsgi_apps/ESSArch_EPP
 export EPPMOD=${EPPROOT}/ESSArch_EPP
 export PYTHONPATH=${EPPROOT}:${EPPMOD}:${VIRT_PYTHON_PATH}/lib/python2.7/site-packages:${EPPMOD}/workers:${EPPMOD}/config:$PYTHONPATH
 export CELERY_USER='shs'

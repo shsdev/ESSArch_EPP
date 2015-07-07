@@ -30,11 +30,13 @@ WSGI config for ESSArch EPP.
 """
 import os, sys
 
-sys.path.append('/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP')
-sys.path.append('/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP/workers')
-sys.path.append('/ESSArch/config')
+sys.path.append('/opt/python_wsgi_apps/ESSArch_EPP')
+sys.path.append('/opt/python_wsgi_apps/ESSArch_EPP/ESSArch_EPP')
+sys.path.append('/opt/python_wsgi_apps/ESSArch_EPP/ESSArch_EPP/workers')
+sys.path.append('/opt/python_wsgi_apps/ESSArch_EPP/ESSArch_EPP/config')
+sys.path.append('/opt/PyVirtEnvs/epp/lib/python2.7/site-packages')
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings"
+os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings_dev"
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

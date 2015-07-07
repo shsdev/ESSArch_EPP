@@ -132,7 +132,7 @@ You should be able to run
 
 If the basic settings are correct, the message should be similar to the following:
 
-    (epp)shs@pluto:$EPPMOD$ python manage.py runserver
+    (epp)<user>@<machine>:$EPPMOD$ python manage.py runserver
     Django version 1.7, using settings 'config.settings_dev'
     Starting development server at http://127.0.0.1:8000/
     Quit the server with CONTROL-C.

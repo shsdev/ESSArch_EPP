@@ -15,11 +15,11 @@
 
 export DJANGO_SETTINGS_MODULE=config.settings_dev
 
-PythonBin=/home/shs/Development/Envs/sac/bin/python
-ESSArchStopStart=/home/shs/Development/EARK/ESSArch_EPP/ESSArch_EPP/workers/ESSArchStopStart.pyc
+PythonBin=/opt/PyVirtEnvs/epp/bin/python
+ESSArchStopStart=/opt/python_wsgi_apps/ESSArch_EPP/ESSArch_EPP/workers/ESSArchStopStart.pyc
 test -x $PythonBin || exit 5
 LOCK_FILE=/var/lock/essarch
-USER=shs
+USER=arch
 
 case "$1" in
     start)

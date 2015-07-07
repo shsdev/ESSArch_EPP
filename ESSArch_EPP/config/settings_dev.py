@@ -60,8 +60,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         #'STORAGE_ENGINE': 'MyISAM',           # STORAGE_ENGINE for MySQL database tables, 'MyISAM' or 'INNODB'
         'NAME': 'eark',                    # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '<MYSQLROOTPASSWORD>',               # Not used with sqlite3.
+        'USER': 'arkiv',                      # Not used with sqlite3.
+        'PASSWORD': 'arkiv',               # Not used with sqlite3.
         'HOST': '',                           # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                           # Set to empty string for default. Not used with sqlite3.
         # This options for storage_engine have to be set for "south migrate" to work.
@@ -271,7 +271,7 @@ from datetime import timedelta
 process_list=["IOEngine.pyc", "FTPServer.pyc", "AccessEngine.pyc","ESSlogging.pyc", "db_sync_ais.pyc", "TLD.pyc", "AIPPurge.pyc", 
                     "AIPWriter.pyc", "SIPRemove.pyc", "AIPValidate.pyc", "AIPChecksum.pyc", "AIPCreator.pyc","SIPValidateFormat.pyc",
                     "SIPValidateApproval.pyc","SIPValidateAIS.pyc","SIPReceiver.pyc"]
-WORKERS_ROOT = '/home/shs/Development/EARK/ESSArch_EPP/ESSArch_EPP/workers'
+WORKERS_ROOT = '/opt/python_wsgi_apps/ESSArch_EPP/ESSArch_EPP/workers'
 for i,p in enumerate(process_list):
     process_list[i]=os.path.join(WORKERS_ROOT,p)
 

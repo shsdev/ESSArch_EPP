@@ -52,9 +52,9 @@ class PROC:
             self.ProcPath = procrow[1]
             self.ProcStdOut = open('/var/log/ESSArch/log/proc/' + self.ProcName + '.log','a')
             if self.ProcName == 'db_sync_ais' or self.ProcName == 'storageLogistics' or self.ProcName == 'ESSlogging':
-                self.cmd = subprocess.Popen(["/home/shs/Development/Envs/sac/bin/python",self.ProcPath,"-p","&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
+                self.cmd = subprocess.Popen(["/opt/PyVirtEnvs/epp/bin/python",self.ProcPath,"-p","&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
             else:
-                self.cmd = subprocess.Popen(["/home/shs/Development/Envs/sac/bin/python",self.ProcPath,"&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
+                self.cmd = subprocess.Popen(["/opt/PyVirtEnvs/epp/bin/python",self.ProcPath,"&"], stdout=self.ProcStdOut, stderr=self.ProcStdOut)
             ESSDB.DB().action('ESSProc','UPD',('Status','1','Run','1','PID',self.cmd.pid),('id',id))
         ############### Stop #################
         if action == 'Stop':

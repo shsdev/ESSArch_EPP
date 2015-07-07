@@ -1,6 +1,6 @@
-EPPROOT=/home/shs/Development/EARK/ESSArch_EPP
+EPPROOT=/opt/python_wsgi_apps/ESSArch_EPP
 EPPMOD=${EPPROOT}/ESSArch_EPP
-VIRT_PYTHON_PATH=/home/shs/Development/Envs/sac
+VIRT_PYTHON_PATH=/opt/PyVirtEnvs/epp
 
 # Names of nodes to start
 #   most will only start one node:
@@ -27,8 +27,8 @@ CELERYD_LOG_FILE="/var/log/ESSArch/log/celery_%N.log"
 CELERYD_PID_FILE="/var/log/ESSArch/log/proc/celery_%N.pid"
 
 # Workers should run as an unprivileged user.
-CELERYD_USER="shs"
-CELERYD_GROUP="shs"
+CELERYD_USER="arch"
+CELERYD_GROUP="arch"
 
 # CELERYBEAT configuration
 CELERYBEAT_LOG_LEVEL=INFO

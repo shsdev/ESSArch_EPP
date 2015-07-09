@@ -275,3 +275,78 @@ The deployed version is a copy from this Github repository, update is done by se
     cd $EPPROOT
     sudo -u www-data git pull origin master
     
+## Testing
+
+### Check parameters
+
+Check configuration of parameters.
+
+Configure parameters at MANAGEMENT > Configuration
+
+#### Paths
+
+* path_control - Control filearea
+* path_gate - Exchange filearea (This directory contains another directory called "lobby")
+* path_ingest - Ingest filearea
+* path_mimetypesdefinition - only used for ET (ESSArch Tools) to find the mimetypesdefinition file
+* path_reception - Lobby ingest filearea (This directory contains two other direcotorys "cd" and "usb")
+* path_work - Work filearea - user workarea in EPP before preservation of IP, example virus control, submit more metadata ...
+
+#### Parameter (core)s
+
+* MD_FTP_ROOT_PATH - filearea to store extra copy metadata files for access purpose
+* verifydir - temporary fileare used to verify tapes
+* OS - parameter for EPP to how to handle tape robotic devices. Values permitted is "SUSE" och "FEDORA".
+
+#### Parameters
+
+* content_descriptionfile    - sip.xml
+* ip_logfile - log.xml
+* package_descriptionfile    - info.xml
+* preservation_descriptionfile - metadata/premis.xml
+* site_profile - SE
+* templatefile_log - log.xml
+* templatefile_specification - sip.xml
+* zone - zone3
+
+#### Archive policys
+
+Select `ProjectX`
+
+Temp work directory - worker process temporary work area
+Ingest directory - worker process SIPRecieiver checks this filearea for new IPs (this filearea should be configured to the same value as the previous Paths/path_ingest)
+
+Click on Storage method 1 (Show)
+
+Target (path or barcodeprefix) - filearea for longterm AIP storage (/var/data/ESSArch/store/disk1)
+
+### Test run
+
+Test data is available in the directory $EPPROOT/testdata/
+
+Extract the tarfile `test_ip1_path_reception.tar` to the directory configured by parameter "path_reception".
+
+Extract the second tarfile `test_ip1_path_gate.tar` to the directory configured by parameter "path_gate".
+
+After you extracted the `test_ip1 run the following steps:
+
+#### Step 1.
+
+CONTROL AREA / CheckIn from Reception
+* Click on media row with test IP
+* Fill in ReqPurpose: test
+** Click on Submit
+** Verifiy if Status = success
+
+#### Step 2.
+
+CONTROL AREA>Preserve Information Package
+*  Click on Generation row with test IP
+* Fill in ReqPurpose: test
+** Click on Submit
+** Verifiy if Status = success
+
+Check worker processes logfiles.
+
+If every process step now in workflow ended with "success" the AIP for test IP is now preserved in storage filearea 
+"Target" that was configured in storage method 1 of the archive policy.

@@ -37,7 +37,7 @@ export PATH=${VIRT_PYTHON_PATH}/bin:$PATH:/usr/sbin
 export EPPROOT=/opt/python_wsgi_apps/ESSArch_EPP
 export EPPMOD=${EPPROOT}/ESSArch_EPP
 export PYTHONPATH=${EPPROOT}:${EPPMOD}:${VIRT_PYTHON_PATH}/lib/python2.7/site-packages:${EPPMOD}/workers:${EPPMOD}/config:$PYTHONPATH
-export CELERY_USER='shs'
+export CELERY_USER='arch'
 
 echo "celery init v${VERSION}."
 if [ $(id -u) -ne 0 ]; then

@@ -28,7 +28,7 @@ CELERYD_PID_FILE="/var/log/ESSArch/log/proc/celery_%N.pid"
 
 # Workers should run as an unprivileged user.
 CELERYD_USER="arch"
-CELERYD_GROUP="arch"
+CELERYD_GROUP="epp"
 
 # CELERYBEAT configuration
 CELERYBEAT_LOG_LEVEL=INFO

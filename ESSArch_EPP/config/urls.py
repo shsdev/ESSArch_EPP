@@ -26,7 +26,9 @@ __author__ = "$Author$"
 import re
 __version__ = '%s.%s' % (__majorversion__,re.sub('[\D]', '',__revision__))
 
+import socket
 from django.conf.urls import patterns, include, url
+from django.views.generic import RedirectView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -59,3 +61,11 @@ urlpatterns = patterns('',
     # StorageLogistics_ws URLS:
     url(r'^webservice/StorageLogisticsService$', "storagelogistics.views.dispatch"),
 )
+
+# Development server starts at http://127.0.0.1:8888/ so this rule is adds
+# the URL prefix path in local development mode
+if socket.gethostname() != "earkdev":
+    urlpatterns = patterns('',
+        url(r'^$', RedirectView.as_view(url='earkdev/')),
+        url(r'^earkdev/', include(urlpatterns)),
+    )

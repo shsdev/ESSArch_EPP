@@ -38,6 +38,9 @@ TEMPLATE_DEBUG = False
 
 SITE_ROOT = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..').replace('\\', '/')
 
+LOGIN_URL = '/epp/accounts/login/'
+LOGOUT_URL = '/epp/accounts/logout/'
+
 # import sys
 # BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # print "================================================================================="
@@ -155,11 +158,12 @@ MEDIA_URL = ''
 # Example: "/home/media/media.lawrence.com/static/"
 #STATIC_ROOT = '/ESSArch/app/static_root'
 #STATIC_ROOT = '/home/henrik/workspace/ESSArch_Django/static_root'
-STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root')
+#STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root')
+STATIC_ROOT = '/var/www/static/epp'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = '/static/epp/'
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.

@@ -82,6 +82,15 @@ In the following variable `$EPPMOD` refers to the absolute path to the sub-direc
 Make sure the virtual environment is active, the following list of packages can be installed using the command:
 
     pip install -r $EPPROOT/requirements.txt
+    
+If installing python packages fails, additional debian packages might be required. 
+They can be installed using `sudo apt-get install <package>`:
+
+* `libssl-dev`
+* `libxslt1-dev` 
+* `libmysqlclient-dev` 
+* `libffi-dev`
+* `unixodbc-dev` 
 
 #### Install additional python dependencies
 
@@ -98,10 +107,24 @@ Adapt environment variables in the following file
 
 and make sure the environment variables are initialised according to your execution environment.
 
+### Additional linux user/group settings
+
+Create user `arch` (needed for `Celery` background processes) and group `epp`, then add both, your 
+development user (or the wsgi user in server for server deployment) and the background process user, to this group:
+
+    sudo useradd arch
+    sudo groupadd epp
+    sudo usermod -g epp arch
+    sudo usermod -a -G epp <user>
+
 ### Create log directory
+
+Note that group `epp` is assigned and that both, your development user (or the wsgi user in server for server deployment) 
+and the background process user, must have the right to write to the log directory.
     
     sudo mkdir -p /var/log/ESSArch/log
-    sudo chown -R <user>:<user> /var/log/ESSArch
+    sudo chown -R <user>:epp /var/log/ESSArch
+    sudo chmod -R g+w /var/log/ESSArch
 
 ### Configure database
 
@@ -206,3 +229,40 @@ which should give the following result:
     Process db_sync_ais now running
     Start process: FTPServer
     Process FTPServer now running
+
+## Deployment
+
+### Configure as WSGI app
+
+Edit `/etc/apache2/sites-enabled/000-default` and add the variable `WSGIScriptAlias` which marks the file 
+path to the WSGI script, that should be processed by mod_wsgi's wsgi-script handler.:
+
+    WSGIScriptAlias $EPPMOD/wsgi.py
+
+A request for http://earkdev.ait.ac.at/earkweb in this case would cause the server to run the WSGI application defined in /path/to/wsgi-scripts/earkweb.
+
+Additionally create variable `WSGIPythonPath` which defines a directory where to search for Python modules. 
+
+    WSGIScriptAlias /epp $EPPMOD/config/wsgi.py
+
+And create a directory entry:
+
+    <Directory $EPPROOT>
+        Options Indexes FollowSymLinks MultiViews
+        <Files wsgi.py>
+            Order allow,deny
+            allow from all
+        </Files>
+    </Directory>
+    
+Further information on using Django with Apache and mod_wsgi:
+
+    https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/modwsgi/
+
+### Update demo server deployment
+
+The deployed version is a copy from this Github repository, update is done by sending a pull request on the master branch:
+
+    cd $EPPROOT
+    sudo -u www-data git pull origin master
+    

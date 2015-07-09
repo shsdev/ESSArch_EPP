@@ -117,14 +117,23 @@ development user (or the wsgi user in server for server deployment) and the back
     sudo usermod -g epp arch
     sudo usermod -a -G epp <user>
 
-### Create log directory
+### Create directories
 
-Note that group `epp` is assigned and that both, your development user (or the wsgi user in server for server deployment) 
-and the background process user, must have the right to write to the log directory.
+Note that group `epp` is assigned and that both, the development user (or the wsgi user in server for server deployment) 
+and the background process user `arch`, must have the right to write to the log directory.
     
+#### Log directories
+
     sudo mkdir -p /var/log/ESSArch/log
     sudo chown -R <user>:epp /var/log/ESSArch
     sudo chmod -R g+w /var/log/ESSArch
+    
+#### Data directories
+    
+    mkdir -p /var/data/ESSArch/ /var/data/ESSArch/Tools /var/data/ESSArch/Tools/env /var/data/ESSArch/Tools/env/data 
+    mkdir -p /var/data/ESSArch/reception /var/data/ESSArch/work /var/data/ESSArch/exchange /var/data/ESSArch/control /var/data/ESSArch/ingest
+    sudo chown -R <user>:epp /var/data/ESSArch
+    sudo chmod -R g+w /var/data/ESSArch
 
 ### Configure database
 

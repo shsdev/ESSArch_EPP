@@ -343,16 +343,16 @@ def installdefaultpaths(): # default paths
             #'path_control':'/data/control',
             'path_control':'/kontroll',
             'path_ingest':'/data/ingest',
-            'path_mimetypesdefinition':'/ESSArch/Tools/env/data',
+            'path_mimetypesdefinition':'/var/data/ESSArch/Tools/env/data',
             }
     else:
         dct = {
-            'path_reception':'/ESSArch/reception',
-            'path_gate':'/ESSArch/exchange',
-            'path_work':'/ESSArch/work',
-            'path_control':'/ESSArch/control',
-            'path_ingest':'/ESSArch/ingest',
-            'path_mimetypesdefinition':'/ESSArch/Tools/env/data',
+            'path_reception':'/var/data/ESSArch/reception',
+            'path_gate':'/var/data/ESSArch/exchange',
+            'path_work':'/var/data/ESSArch/work',
+            'path_control':'/var/data/ESSArch/control',
+            'path_ingest':'/var/data/ESSArch/ingest',
+            'path_mimetypesdefinition':'/var/data/ESSArch/Tools/env/data',
             }
 
     # create according to model with two fields
@@ -533,7 +533,7 @@ def installdefaultESSConfig(): # default ESSConfig
                     (u'RobotReqTable',u'robotreq'),
                     (u'StorageMediumTable',u'storageMedium'),
                     (u'ExtPrjTapedURL',u''),
-                    (u'verifydir',u'/ESSArch/verify'),
+                    (u'verifydir',u'/var/data/ESSArch/verify'),
                     (u'AgentIdentifierValue',install_site),
                     (u'ExtDBupdate',u'0'),
                     (u'storageMediumLocation',medium_location),
@@ -604,7 +604,7 @@ def installdefaultstorageMedium(): # default storageMedium
         storageMedium_obj.ExtDBdatetime=timestamp
         storageMedium_obj.save()
 
-def installdefaultESSArchPolicy(): # default ESSArchPolicy
+def installdefaultESSArchPolicy(): # default /ESSArchPolicy
 
     if not ESSArchPolicy.objects.filter(id=u'1').exists():
 
@@ -686,11 +686,11 @@ def installdefaultESSArchPolicy(): # default ESSArchPolicy
             ESSArchPolicy_obj.ValidateXML=u'1'
             ESSArchPolicy_obj.ManualControll=u'0'
             ESSArchPolicy_obj.AIPType=u'1'
-            ESSArchPolicy_obj.AIPpath=u'/ESSArch/essarch_temp'
+            ESSArchPolicy_obj.AIPpath=u'/var/data/ESSArch/essarch_temp'
             ESSArchPolicy_obj.PreIngestMetadata=u'0'
             ESSArchPolicy_obj.IngestMetadata=u'4'
             ESSArchPolicy_obj.INFORMATIONCLASS=u'1'
-            ESSArchPolicy_obj.IngestPath=u'/ESSArch/ingest'
+            ESSArchPolicy_obj.IngestPath=u'/var/data/ESSArch/ingest'
             ESSArchPolicy_obj.IngestDelete=u'1'
             ESSArchPolicy_obj.sm_1=u'1'
             ESSArchPolicy_obj.sm_type_1=u'200'
@@ -700,7 +700,7 @@ def installdefaultESSArchPolicy(): # default ESSArchPolicy
             ESSArchPolicy_obj.sm_minChunkSize_1=u'0'
             ESSArchPolicy_obj.sm_minContainerSize_1=u'0'
             ESSArchPolicy_obj.sm_minCapacityWarning_1=u'0'
-            ESSArchPolicy_obj.sm_target_1=u'/ESSArch/store/disk1'
+            ESSArchPolicy_obj.sm_target_1=u'/var/data/ESSArch/store/disk1'
             ESSArchPolicy_obj.sm_2=u'0'
             ESSArchPolicy_obj.sm_type_2=u'200'
             ESSArchPolicy_obj.sm_format_2=u'103'
@@ -772,7 +772,7 @@ def installdefaultESSProc(): # default ESSProc
 def installdefaultdefaultvalues(): # default default values
 
     dct = {
-           'administration_storagemaintenance__temp_path': '/ESSArch/essarch_temp',
+           'administration_storagemaintenance__temp_path': '/var/data/ESSArch/essarch_temp',
            'administration_storagemaintenance__copy_path': '',
            'access_new__ReqType': '5',
            }

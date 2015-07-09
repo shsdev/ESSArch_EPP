@@ -29,8 +29,8 @@ import re
 __version__ = '%s.%s' % (__majorversion__,re.sub('[\D]', '',__revision__))
 
 import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_dev')
+#sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_dev')
 
 import django
 django.setup()

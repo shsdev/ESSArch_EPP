@@ -1,3 +1,4 @@
+migrations/
 *.py[co]
 *.pyo
 *~
@@ -6,4 +7,3 @@ ESSArch_EPP.egg-info/
 MANIFEST
 .settings/
 .idea
-*/migrations/*

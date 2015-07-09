@@ -318,25 +318,26 @@ Ingest directory - worker process SIPRecieiver checks this filearea for new IPs 
 
 Click on Storage method 1 (Show)
 
-Target (path or barcodeprefix) - filearea for longterm AIP storage (/var/data/ESSArch/store/disk1)
+Target (path or barcodeprefix) - filearea for longterm AIP storage (`/var/data/ESSArch/store/disk1`)
 
 ### Test run
 
-Test data is available in the directory $EPPROOT/testdata/
+Test data is available in the directory `$EPPROOT/testdata/`.
 
-Extract the tarfile `test_ip1_path_reception.tar` to the directory configured by parameter "path_reception".
+Extract the tarfile `test_ip1_path_reception.tar` to the directory configured by parameter "path_reception" (e.g. `/var/data/ESSArch/reception`)".
 
-Extract the second tarfile `test_ip1_path_gate.tar` to the directory configured by parameter "path_gate".
+Extract the second tarfile `test_ip1_path_gate.tar` to the directory configured by parameter "path_gate" (e.g. `/var/data/ESSArch/exchange`).
 
-After you extracted the `test_ip1 run the following steps:
+After you extracted the `test_ip1` run the following steps:
 
 #### Step 1.
 
 CONTROL AREA / CheckIn from Reception
-* Click on media row with test IP
-* Fill in ReqPurpose: test
-** Click on Submit
-** Verifiy if Status = success
+
++ Click on media row with test IP
++ Fill in ReqPurpose: test
+    - Click on Submit
+    - Verifiy if Status = success
 
 #### Step 2.
 

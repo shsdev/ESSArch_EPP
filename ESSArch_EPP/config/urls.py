@@ -66,6 +66,6 @@ urlpatterns = patterns('',
 # the URL prefix path in local development mode
 if socket.gethostname() != "earkdev":
     urlpatterns = patterns('',
-        url(r'^$', RedirectView.as_view(url='earkdev/')),
-        url(r'^earkdev/', include(urlpatterns)),
+        url(r'^$', RedirectView.as_view(url='epp/')),
+        url(r'^epp/', include(urlpatterns)),
     )

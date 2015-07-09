@@ -172,10 +172,10 @@
       	{% endif %}
       	{% if user.is_staff %}
 		<li> 
-			<a href="#vertical">MANAGEMENT</a>
+			<a href="#vertical">	MANAGEMENT</a>
 	    	<ul>
 		      {#<li><a href="/admin/ip/informationpackage/">Information Packages</a></li>#}
-		      <li><a href="/admin">Site administration</a></li>
+		      <li><a href="{% url 'admin:index' %}">Site administration</a></li>
 		      {% if perms.auth %}  <li><a href="/admin/auth">User administration</a></li>  {% endif %}
 		      {% if perms.configuration %}  <li><a href="/admin/configuration">Configuration</a></li>  {% endif %}
 		      {#<li><a href="/admin/configuration/parameter/">Parameters</a></li>#}

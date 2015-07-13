@@ -56,7 +56,7 @@ def index(request):
 def logout_view(request):
     logout(request)
     # Redirect to a success page.
-    return HttpResponseRedirect( '/' )
+    return HttpResponseRedirect( './' )
 
 
 @login_required

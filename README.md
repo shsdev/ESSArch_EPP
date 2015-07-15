@@ -44,7 +44,19 @@ Create a virtual environment (e.g. named earkweb) to install additional python p
 
     sudo pip install virtualenv
     sudo pip install virtualenvwrapper
-    mkvirtualenv  epp
+
+Add the following in your ~/.bashrc 
+
+    source "/usr/local/bin/virtualenvwrapper.sh"
+    export WORKON_HOME="/opt/PyVirtEnvs/"
+
+Create the PyVirtEnvs folder and set the permission for your user
+
+    mkdir /opt/PyVirtEnvs
+    chown [youruser]:[yourgroup] /opt/PyVirtEnvs
+    source ~/.bashrc
+
+    mkvirtualenv epp
     workon epp
 
 If the virtual environment is active, this is shown by a prefix in the console:

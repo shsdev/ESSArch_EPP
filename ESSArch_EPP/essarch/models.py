@@ -19,6 +19,7 @@
     Web - http://www.essolutions.se
     Email - essarch@essolutions.se
 '''
+from celery.worker.strategy import default
 __majorversion__ = "2.5"
 __revision__ = "$Revision$"
 __date__ = "$Date$"
@@ -28,10 +29,10 @@ __version__ = '%s.%s' % (__majorversion__,re.sub('[\D]', '',__revision__))
 from django.db import models
 from django import forms
 from django.utils.safestring import mark_safe
-from django.forms.util import flatatt
+from django.forms.utils import flatatt
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from configuration.models import ESSArchPolicy
+from configuration.models import ESSArchPolicy, ArchivePolicy
 #import django_tables2 as tables
 #from django_tables2.utils import A
 from djcelery.models import TaskMeta
@@ -245,6 +246,9 @@ MediumType_CHOICES = (
     (303, 'IBM-LTO3'),
     (304, 'IBM-LTO4'),
     (305, 'IBM-LTO5'),
+    (306, 'IBM-LTO6'),
+    (325, 'HP-LTO5'),
+    (326, 'HP-LTO6'),
 )
 
 MediumFormat_CHOICES = (
@@ -289,7 +293,8 @@ class ArchiveObject(models.Model):
     id = BigAutoField(primary_key=True)
     ObjectUUID = models.CharField(max_length=36, unique=True)
     #PolicyId = models.IntegerField(null=True)
-    PolicyId = models.ForeignKey(ESSArchPolicy, db_column='PolicyId', to_field='PolicyID', default=0)
+    #PolicyId = models.ForeignKey(ESSArchPolicy, db_column='PolicyId', to_field='PolicyID', default=0)
+    PolicyId = models.ForeignKey(ArchivePolicy, db_column='PolicyId', to_field='PolicyID', default=0)
     ObjectIdentifierValue = models.CharField(max_length=255, unique=True)
     ObjectPackageName = models.CharField(max_length=255)
     ObjectSize = models.BigIntegerField(null=True)
@@ -324,6 +329,8 @@ class ArchiveObject(models.Model):
     ExtDBdatetime = models.DateTimeField(null=True)
     class Meta:
         db_table = 'IngestObject'
+    def __unicode__(self):
+        return self.ObjectIdentifierValue
     def get_absolute_url(self):
         return reverse('ingest_listobj')
     def get_ip_list(self,StatusProcess=None,StatusProcess__lt=None,StatusProcess__in=None,StatusActivity__in=None):
@@ -742,7 +749,7 @@ class storage(models.Model):
 class robot(models.Model):
     slot_id = models.IntegerField(null=True)
     drive_id = models.IntegerField(null=True)
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=45)
     t_id = models.CharField(max_length=6)
     class Meta:
         db_table = 'robot'
@@ -850,6 +857,7 @@ class MigrationQueue(models.Model):
     Status = models.IntegerField(null=True, blank=True, default=0, choices=ReqStatus_CHOICES)
     Path = models.CharField(max_length=255)
     CopyPath = models.CharField(max_length=255,blank=True)
+    CopyOnlyFlag =  models.BooleanField(default = False)
     task_id = models.CharField(max_length=36,blank=True)
     #task_id = models.ForeignKey(TaskMeta, db_column='task_id', to_field='task_id', null=True, blank=True)
     posted = models.DateTimeField(auto_now_add=True)
@@ -870,6 +878,7 @@ class MigrationQueueForm(forms.ModelForm):
     #ReqType = forms.ChoiceField(label='ReqType', choices=ReqType_CHOICES , widget = PlainText())
     ObjectIdentifierValue = forms.CharField(widget=forms.Textarea())
     TargetMediumID = forms.CharField(widget=forms.Textarea())
+    CopyOnlyFlag = forms.BooleanField(widget=forms.CheckboxInput(), required=False,initial=False)
     Status = forms.IntegerField(widget = forms.HiddenInput())
     user = forms.CharField(label='User', widget = PlainText())
 #    def clean_Path(self):

@@ -19,7 +19,7 @@ PythonBin=/opt/PyVirtEnvs/epp/bin/python
 ESSArchStopStart=/opt/python_wsgi_apps/ESSArch_EPP/ESSArch_EPP/workers/ESSArchStopStart.pyc
 test -x $PythonBin || exit 5
 LOCK_FILE=/var/lock/essarch
-USER=arch
+USER=www-data
 
 case "$1" in
     start)

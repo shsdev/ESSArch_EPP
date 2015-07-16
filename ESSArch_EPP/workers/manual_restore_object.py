@@ -41,7 +41,7 @@ class test():
             logging.info('Success to restore %s from tape %s (%s, %s)',restore_object,t_id,self.cmdres,why)
 
 if __name__ == '__main__':
-    LogFile = '/var/log/ESSArch/log/Manual_Restore.log'
+    LogFile = '/ESSArch/log/Manual_Restore.log'
 
     LogLevel = logging.INFO
     #LogLevel = logging.DEBUG

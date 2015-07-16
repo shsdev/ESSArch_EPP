@@ -260,6 +260,12 @@ INSTALLED_APPS = (
     'reports',
     'logfileviewer',
     'monitoring',
+    #'nested_admin',
+    'nested_inline',
+    #'filetransfer',
+    'Storage',
+    'StorageMethodDisk',
+    'EarkAipCreation',
 )
 
 import djcelery
@@ -268,6 +274,9 @@ djcelery.setup_loader()
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 CELERYBEAT_SCHEDULER='djcelery.schedulers.DatabaseScheduler'
+CELERY_DEFAULT_QUEUE = 'default'
+CELERY_IGNORE_RESULT = False
+TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 
 from celery.schedules import crontab
 from datetime import timedelta
@@ -413,6 +422,24 @@ LOGGING = {
             # Reference to handler in log.py below
             'class': 'monitoring.log.DbLogHandler',
         },
+        'log_file_filetransfer': {
+            'level': 'DEBUG',
+            #'filters': ['require_debug_false'],
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': '/var/log/ESSArch/log/filetransfer.log',
+            'maxBytes': 1024*1024*5, # 5MB
+            'backupCount': 1000,
+        },
+        'log_file_StorageMethodDisk': {
+            'level': 'DEBUG',
+            #'filters': ['require_debug_false'],
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': '/var/log/ESSArch/log/StorageMethodDisk.log',
+            'maxBytes': 1024*1024*5, # 5MB
+            'backupCount': 1000,
+        },
     },
     'loggers': {
         'django': {
@@ -465,10 +492,20 @@ LOGGING = {
             'handlers': ['dblog'],
             'propagate': True,
         },
+        'essarch.filetransfer': {
+            'level': 'INFO',
+            'handlers': ['log_file_filetransfer'],
+            'propagate': True,
+        },
+        'StorageMethodDisk': {
+            'level': 'INFO',
+            'handlers': ['log_file_StorageMethodDisk'],
+            'propagate': True,
+        },
     },
 }
 
-try:
-    from local_settings import *
-except ImportError, exp:
-    pass
+#try:
+#    from local_settings import *
+#except ImportError, exp:
+#    pass

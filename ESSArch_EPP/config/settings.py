@@ -35,6 +35,8 @@ TEMPLATE_DEBUG = DEBUG
 
 SITE_ROOT = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..').replace('\\', '/')
 
+LOGIN_URL = '/epp/accounts/login/'
+LOGOUT_URL = '/epp/accounts/logout/'
 ALLOWED_HOSTS = ['*']
 
 ADMINS = (
@@ -47,9 +49,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         #'STORAGE_ENGINE': 'MyISAM',           # STORAGE_ENGINE for MySQL database tables, 'MyISAM' or 'INNODB'
-        'NAME': 'essarch',                    # Or path to database file if using sqlite3.
+        'NAME': 'eark',                    # Or path to database file if using sqlite3.
         'USER': 'arkiv',                      # Not used with sqlite3.
-        'PASSWORD': 'password',               # Not used with sqlite3.
+        'PASSWORD': 'arkiv',               # Not used with sqlite3.
         'HOST': '',                           # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                           # Set to empty string for default. Not used with sqlite3.
         # This options for storage_engine have to be set for "south migrate" to work.
@@ -59,24 +61,44 @@ DATABASES = {
     }
 }
 
-DATABASES_AIS = {
-    'default': {
-        'DRIVER': 'SQL Server', # must match entry in /etc/unixODBC/odbcinst.ini
-        'NAME': 'Arkis2Balder',
-        'USER': 'RA2B_ES21rcH',
-        'PASSWORD': 'x',
-        'HOST': '10.100.9.2',                        
-        'PORT': '1433',
-        'TDS': '7.2',
-    }
-}
-
 # Email configuration
 EMAIL_HOST = 'localhost'
+#EMAIL_HOST = '192.168.0.51'
 EMAIL_PORT = 25
 SERVER_EMAIL = 'ESSArch@localhost' # from
+#SERVER_EMAIL = 'ESSArch@essolutions.se' # from
 #DEFAULT_FROM_EMAIL = 'ESSArch_Default@localhost'
+#DEFAULT_FROM_EMAIL = 'ESSArch_Default@essolutions.se'
+#EMAIL_USE_TLS = True
 EMAIL_SUBJECT_PREFIX = "[ESSArch] "
+
+# django-log-files-viewer
+#LOG_FILES_DIR = '/var/log/ESSArch/log'
+#LOG_FILES_RE = '(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\s\[(?P<type>[A-Z]+)\]\s(?P<message>.+)'
+#LOG_FILES_RE = '(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\s(?P<type>[A-Z]+)\s(?P<message>.+)'
+
+# ESS Django process
+#LOG_FILES_NAME_1 = ['celery_worker1','controlarea','ESSArch_db','ESSArch','storageLogistics','storagemaintenance','Tools']
+#LOG_FILES_RE_1 = '(?P<type>[A-Z]+)\s(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\s(?P<module>[a-zA-Z]+)\s(?P<process>[0-9]+)\s(?P<thread>[0-9]+)\s(?P<message>.+)'
+
+# ESS core process
+#LOG_FILES_NAME_2 = ['AccessEngine','AIPChecksum','AIPCreator','AIPPurge','AIPValidate','AIPWriter','AIPWriter_2','db_sync_ais','ESSlogging','ESSpreingest',
+ #                   'FTPServer','IOEngine_2','IOEngine','SIPReceiver','SIPRemove','SIPValidateAIS','SIPValidateApproval','SIPValidateFormat','TLD']
+#LOG_FILES_RE_2 = '(?P<date>\d{2} [a-zA-Z]+ \d{4} \d{2}:\d{2}:\d{2})\s(?P<type>[\/\-\w]+)\s(?P<message>.+)'
+
+#format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s'
+    # Is a regex to parse your log file against. It completely depends of your Django logging settings.
+    # And table column names (in a parsed logfile) depend from group names you provide in the regexp.
+    # E.g. for Django logging server to parse with this regexp you need to have log, as in example
+    # django_log_file_viewer/testdata/testing.log file.
+
+    # to produce this log I've added this formatter to my website.
+    
+    #'formatters': {
+    #    'verbose': {
+    #        'format': '%(asctime)s [%(levelname)s] %(message)s'
+    #    },
+    #},
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -122,11 +144,13 @@ MEDIA_URL = ''
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
 #STATIC_ROOT = '/ESSArch/app/static_root'
-STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root')
+#STATIC_ROOT = '/home/henrik/workspace/ESSArch_Django/static_root'
+#STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root')
+STATIC_ROOT = '/var/www/static/epp'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = '/static/epp/'
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
@@ -139,6 +163,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     #"/ESSArch/app/static",
+    #"/home/henrik/workspace/ESSArch_Django/static",
     os.path.join(SITE_ROOT, 'static'),
 )
 
@@ -147,6 +172,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -156,6 +182,7 @@ SECRET_KEY = 'olkgd-#9pvgs3pmuwpk4v@)17d$@bij0&t8e#7wybgitrv1r@)'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -164,6 +191,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    #'django.middleware.locale.LocaleMiddleware',
+    #'djangomako.middleware.MakoMiddleware',
+    # Uncomment the next line for simple clickjacking protection:
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -187,6 +218,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     #"/ESSArch/app/templates",
+    #"/home/henrik/workspace/ESSArch_Django/templates"
     os.path.join(SITE_ROOT, 'templates'),
 )
 
@@ -197,7 +229,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'south',
     'djcelery',
     'djangojs',
     'eztables',
@@ -211,6 +242,9 @@ INSTALLED_APPS = (
     'reports',
     'logfileviewer',
     'monitoring',
+    #'nested_inline',
+    'Storage',
+    'StorageMethodDisk',
 )
 
 import djcelery
@@ -219,6 +253,7 @@ djcelery.setup_loader()
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 CELERYBEAT_SCHEDULER='djcelery.schedulers.DatabaseScheduler'
+CELERY_DEFAULT_QUEUE = 'default'
 
 from celery.schedules import crontab
 from datetime import timedelta
@@ -226,7 +261,7 @@ from datetime import timedelta
 process_list=["IOEngine.pyc", "FTPServer.pyc", "AccessEngine.pyc","ESSlogging.pyc", "db_sync_ais.pyc", "TLD.pyc", "AIPPurge.pyc", 
                     "AIPWriter.pyc", "SIPRemove.pyc", "AIPValidate.pyc", "AIPChecksum.pyc", "AIPCreator.pyc","SIPValidateFormat.pyc",
                     "SIPValidateApproval.pyc","SIPValidateAIS.pyc","SIPReceiver.pyc"]
-WORKERS_ROOT = '/ESSArch/pd/python/lib/python2.7/site-packages/ESSArch_EPP/workers'
+WORKERS_ROOT = '/opt/python_wsgi_apps/ESSArch_EPP/ESSArch_EPP/workers'
 for i,p in enumerate(process_list):
     process_list[i]=os.path.join(WORKERS_ROOT,p)
 
@@ -242,7 +277,7 @@ CELERYBEAT_SCHEDULE = {
         "task": "monitoring.tasks.CheckProcFilesTask",
         "schedule": timedelta(seconds=60),
         "kwargs": {
-                'proc_log_path':"/ESSArch/log/proc",
+                'proc_log_path':"/var/log/ESSArch/log/proc",
         }
     },
     "CheckStorageMediums-everyday-07:00": {
@@ -364,6 +399,15 @@ LOGGING = {
             # Reference to handler in log.py below
             'class': 'monitoring.log.DbLogHandler',
         },
+        'log_file_StorageMethodDisk': {
+            'level': 'DEBUG',
+            #'filters': ['require_debug_false'],
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': '/var/log/ESSArch/log/StorageMethodDisk.log',
+            'maxBytes': 1024*1024*5, # 5MB
+            'backupCount': 1000,
+        },
     },
     'loggers': {
         'django': {
@@ -415,11 +459,16 @@ LOGGING = {
             'level': 'ERROR',
             'handlers': ['dblog'],
             'propagate': True,
-        },                
+        },
+        'StorageMethodDisk': {
+            'level': 'INFO',
+            'handlers': ['log_file_StorageMethodDisk'],
+            'propagate': True,
+        },
     },
 }
 
-try:
-    from local_settings import *
-except ImportError, exp:
-    pass
+#try:
+#    from local_settings import *
+#except ImportError, exp:
+#    pass

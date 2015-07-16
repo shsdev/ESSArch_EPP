@@ -98,7 +98,7 @@
 {% block branding %}
   <div id="header-wrapper">
     <div id="branding-wrapper">
-      <h2 class="site-name"><a href="{% url 'home' %}" title="ESSArch">ESSArch EPP</a></h2>
+      <h2 class="site-name"><a href="/" title="ESSArch">ESSArch EPP</a></h2>
       <div class='site-slogan'>(ESSArch Preservation Platform)</div>
     </div><!-- end branding wrapper -->
   </div><!-- end header-wrapper -->
@@ -110,8 +110,8 @@
   <div id="user-tools">
     {% trans 'Welcome,' %}
     <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
-    <a href="{% url 'home' %}accounts/changepassword">{% trans 'Change password' %}</a> /
-    <a href="{% url 'home' %}accounts/logout">{% trans 'Log out' %}</a>
+    <a href="/changepassword">{% trans 'Change password' %}</a> /
+    <a href="/logout">{% trans 'Log out' %}</a>
   </div>
   {% endif %}
 
@@ -157,8 +157,9 @@
 	    	<ul>
 	    		<li><a href="{% url 'admin_liststoragemedium' %}">{% trans 'List media information' %}</a></li>
 	    		<li><a href="{% url 'admin_listrobot' %}">{% trans 'List robot information' %}</a></li>
-	    		<li><a href="{% url 'admin_storagemaintenance' %}">{% trans 'Storage Maintenance' %}</a></li>
-	    		<li><a href="{% url 'migration_list' %}">{% trans 'Storage Maintenance list' %}</a></li>
+	    		<li><a href="{% url 'admin_storagemigration' %}">{% trans 'Storage Migration' %}</a></li>
+	    		<li><a href="{% url 'admin_storagemaintenance' %}">{% trans 'Storage Maintenance' %}</a><li>
+	    		<li><a href="{% url 'migration_list' %}">{% trans 'Storage Migration list' %}</a></li>
 	    	</ul>
 		</li>
 	    {% if perms.reports.list_reports %}		
@@ -172,20 +173,20 @@
       	{% endif %}
       	{% if user.is_staff %}
 		<li> 
-			<a href="#vertical">	MANAGEMENT</a>
+			<a href="#vertical">MANAGEMENT</a>
 	    	<ul>
 		      {#<li><a href="/admin/ip/informationpackage/">Information Packages</a></li>#}
-		      <li><a href="{% url 'admin:index' %}">Site administration</a></li>
-		      {% if perms.auth %}  <li><a href="{% url 'admin:index' %}auth">User administration</a></li>  {% endif %}
-		      {% if perms.configuration %}  <li><a href="{% url 'admin:index' %}configuration">Configuration</a></li>  {% endif %}
-		      {#<li><a href="{% url 'admin:index' %}configuration/parameter/">Parameters</a></li>#}
-		      {#<li><a href="{% url 'admin:index' %}configuration/logevent/">Log Event Types</a></li>#}
-		      {#<li><a href="{% url 'admin:index' %}configuration/schemaprofile/">Schema Profiles</a></li>#}
-		   {#   <li><a href="{% url 'admin:index' %}configuration/install_defaultparameters"><i>Install Default Parameters</a></i></li> #}
-		      {#<li><a href="{% url 'admin:index' %}configuration/install_defaultadditionalmetadata"><i>Install Default Additional Metadata</a></i></li>#}
-	          {#<li><a href="{% url 'admin:index' %}configuration/install_defaultusers"><i>Install Default Users</a></i></li>#}
-		      {#<li><a href="{% url 'admin:index' %}configuration/install_defaultschemas"><i>Install Default Schema Profiles</a></i></li>#}
-		      {#<li><a href="{% url 'admin:index' %}configuration/install_defaults"><i>Install Default Log Events</a></i></li>#}
+		      <li><a href="/admin">Site administration</a></li>
+		      {% if perms.auth %}  <li><a href="/admin/auth">User administration</a></li>  {% endif %}
+		      {% if perms.configuration %}  <li><a href="/admin/configuration">Configuration</a></li>  {% endif %}
+		      {#<li><a href="/admin/configuration/parameter/">Parameters</a></li>#}
+		      {#<li><a href="/admin/configuration/logevent/">Log Event Types</a></li>#}
+		      {#<li><a href="/admin/configuration/schemaprofile/">Schema Profiles</a></li>#}
+		   {#   <li><a href="/configuration/install_defaultparameters"><i>Install Default Parameters</a></i></li> #}
+		      {#<li><a href="/configuration/install_defaultadditionalmetadata"><i>Install Default Additional Metadata</a></i></li>#}
+	          {#<li><a href="/configuration/install_defaultusers"><i>Install Default Users</a></i></li>#}
+		      {#<li><a href="/configuration/install_defaultschemas"><i>Install Default Schema Profiles</a></i></li>#}
+		      {#<li><a href="/configuration/install_defaults"><i>Install Default Log Events</a></i></li>#}
 	    	</ul>
 		</li>
       	{% endif %}

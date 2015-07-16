@@ -70,7 +70,7 @@ if __name__ == '__main__':
             "nose>=1.1.2",
             "lxml>=3.1.0",
             "pyftpdlib>=1.4.0",
-            "Django>=1.6.2",
+            "Django>=1.8.2",
             "django-picklefield>=0.3.1",
             "argparse>=1.2.1",
             "httplib2>=0.7.5",

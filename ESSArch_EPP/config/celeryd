@@ -4,7 +4,7 @@ VIRT_PYTHON_PATH=/opt/PyVirtEnvs/epp
 
 # Names of nodes to start
 #   most will only start one node:
-CELERYD_NODES="worker1"
+CELERYD_NODES="worker1 smdisk1 aipc1"
 #   but you can also start multiple and configure settings
 #   for each in CELERYD_OPTS (see `celery multi --help` for examples).
 #CELERYD_NODES="worker1 worker2 worker3"
@@ -18,8 +18,12 @@ CELERY_APP="config"
 # Where to chdir at start.
 CELERYD_CHDIR="${EPPMOD}"
 
+#CELERYD_MULTI="$CELERYD_CHDIR/manage.py celeryd_multi"
+
 # Extra command-line arguments to the worker
-CELERYD_OPTS="--time-limit=300 --concurrency=8"
+#CELERYD_OPTS="--time-limit=300 --concurrency=1"
+CELERYD_OPTS="-Q:worker1 default -c:worker1 2 -Q:smdisk1 smdisk -c:smdisk1 1 --time-limit=300 -Q:aipc1 aipc -c:aipc1 1 --time-limit=300"
+#CELERYD_OPTS="-Q:worker1 default,test -c:worker1 2 --time-limit=300 -E"
 
 # %N will be replaced with the first part of the nodename.
 CELERYD_LOG_LEVEL=INFO
@@ -27,7 +31,7 @@ CELERYD_LOG_FILE="/var/log/ESSArch/log/celery_%N.log"
 CELERYD_PID_FILE="/var/log/ESSArch/log/proc/celery_%N.pid"
 
 # Workers should run as an unprivileged user.
-CELERYD_USER="arch"
+CELERYD_USER="www-data"
 CELERYD_GROUP="epp"
 
 # CELERYBEAT configuration

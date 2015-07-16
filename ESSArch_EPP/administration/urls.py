@@ -19,6 +19,7 @@
     Web - http://www.essolutions.se
     Email - essarch@essolutions.se
 '''
+
 __majorversion__ = "2.5"
 __revision__ = "$Revision$"
 __date__ = "$Date$"
@@ -40,6 +41,8 @@ from views import (
     robotReqUpdate,  
     robotReqDelete,
     robotInventory, 
+    StorageMigration,
+    TargetPrePopulation,
     StorageMaintenance,
     StorageMaintenanceDatatablesView,
     MigrationList,
@@ -67,9 +70,11 @@ urlpatterns = patterns('',
     url(r'^robotrequpdate/(?P<pk>\d+)/$', robotReqUpdate.as_view(), name='robotreq_update'),
     url(r'^robotreqdelete/(?P<pk>\d+)/$', robotReqDelete.as_view(), name='robotreq_delete'),
     url(r'^robotinventory/(?P<command>\d+)/$', robotInventory.as_view(), name='admin_create_robotinventory'),
-    url(r'^storagemaintenance$', StorageMaintenance.as_view(), name='admin_storagemaintenance'),
+    url(r'^storagemigration$', StorageMigration.as_view(), name='admin_storagemigration'),
+    url(r'^migrationtarget$', TargetPrePopulation.as_view(), name='admin_migrationtarget'),
     url(r'^storagemaintenancedt$', StorageMaintenanceDatatablesView.as_view(), name='storagemaintenance-dt'),
-    url(r'^migreqlist/$', MigrationList.as_view(),name='migration_list'),
+    url(r'^storagemaintenance$', StorageMaintenance.as_view(), name='admin_storagemaintenance'),
+    url(r'^migreqlist/$', MigrationList.as_view(), name='migration_list'),
     url(r'^migreqnew$', MigrationCreate.as_view(), name='migration_create_parameter'),
     url(r'^migreqnew/$', MigrationCreate.as_view(), name='migration_create'),
     url(r'^migreqnew/(?P<ip_uuid>[^&]*)/$', MigrationCreate.as_view(), name='migration_create_ip_uuid'),

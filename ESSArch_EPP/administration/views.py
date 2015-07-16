@@ -19,6 +19,8 @@
     Web - http://www.essolutions.se
     Email - essarch@essolutions.se
 '''
+from django.core.context_processors import request
+from _elementtree import tostring
 __majorversion__ = "2.5"
 __revision__ = "$Revision$"
 __date__ = "$Date$"
@@ -35,12 +37,13 @@ from essarch.models import storageMedium, MediumType_CHOICES, MediumStatus_CHOIC
                            storage, robot, robotQueue, robotQueueForm, robotQueueFormUpdate, RobotReqType_CHOICES, ArchiveObject, \
                            MigrationQueue, MigrationReqType_CHOICES, ReqStatus_CHOICES, MigrationQueueForm, MigrationQueueFormUpdate, DeactivateMediaForm
 
-from configuration.models import sm, DefaultValue, ESSConfig
+from configuration.models import sm, DefaultValue, ESSConfig, ESSArchPolicy
 
 from administration.tasks import MigrationTask, RobotInventoryTask
 
 from django.views.generic.detail import DetailView
 from django.views.generic import ListView, TemplateView
+from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 
 from django.utils.decorators import method_decorator
@@ -57,7 +60,8 @@ from django.utils import timezone
 
 #from django_tables2 import RequestConfig
 
-from essarch.libs import DatatablesView, flush_transaction, DatatablesForm, get_field_choices, get_object_list_display
+#from essarch.libs import DatatablesView, flush_transaction, DatatablesForm, get_field_choices, get_object_list_display
+from essarch.libs import DatatablesView, DatatablesForm, get_field_choices, get_object_list_display
 
 import uuid, ESSPGM, ESSMSSQL, logging, datetime, pytz
 
@@ -336,6 +340,77 @@ class robotInventory(DetailView):
         return context
     
 
+class StorageMigration(TemplateView):
+    template_name = 'administration/storagemigration.html'
+
+    @method_decorator(permission_required('essarch.list_storageMedium'))
+    def dispatch(self, *args, **kwargs):
+        return super(StorageMigration, self).dispatch( *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+
+        context = super(StorageMigration, self).get_context_data(**kwargs)
+        context['label'] = 'ADMINISTRATION - Storage Migration'
+        context['DefaultValue'] = dict(DefaultValue.objects.filter(entity__startswith='administration_storagemigration').values_list('entity','value'))
+        #context['DefaultValueObject'] = DefaultValue.objects.filter(entity__startswith='administration_storagemaintenance').get_value_object()
+        return context
+    
+    
+            
+class TargetPrePopulation(View):
+
+    @method_decorator(permission_required('essarch.list_storageMedium'))
+    def dispatch(self, *args, **kwargs):
+    
+        return super(TargetPrePopulation, self).dispatch( *args, **kwargs)
+        
+    def get_enabled_policies(self, *args, **kwargs):
+        
+        allPolicies = ESSArchPolicy.objects.all()
+        enabled_policies = []
+        policy_selection_list =[]
+        for p in allPolicies: 
+            if p.PolicyStat == 1:
+                    enabled_policies.append(p)
+
+        i = 0
+        while (i < len(enabled_policies)):
+            
+            a = enabled_policies[i]
+
+            Policy ={}
+            Policy['PolicyID'] = a.PolicyID
+            Policy['PolicyName'] =  a.PolicyName
+            
+            targetlist = []
+
+            if a.sm_1 == True and 299 <a.sm_type_1 <400:
+                        targetlist.append(a.sm_target_1)
+            if a.sm_2 == True and 299 <a.sm_type_2 <400:
+                        targetlist.append(a.sm_target_2)
+            if a.sm_3 == True and 299 <a.sm_type_3 <400:
+                        targetlist.append(a.sm_target_3)
+            if a.sm_4 == True and 299 <a.sm_type_4 <400:
+                        targetlist.append(a.sm_target_4)            
+            Policy['targetlist'] = targetlist
+            policy_selection_list.append(Policy)
+            i = i +1
+        
+        return policy_selection_list  
+
+    def json_response(self, request):
+        
+        data = self.get_enabled_policies()
+        return HttpResponse(
+            json.dumps(data, cls=DjangoJSONEncoder),
+            mimetype='application/json'
+        )
+    def get(self, request, *args, **kwargs):
+        
+        return self.json_response(request)  
+    
+    
+    
 class StorageMaintenance(TemplateView):
     template_name = 'administration/storagemaintenance.html'
 
@@ -349,7 +424,7 @@ class StorageMaintenance(TemplateView):
         context['DefaultValue'] = dict(DefaultValue.objects.filter(entity__startswith='administration_storagemaintenance').values_list('entity','value'))
         #context['DefaultValueObject'] = DefaultValue.objects.filter(entity__startswith='administration_storagemaintenance').get_value_object()
         return context
-    
+     
 class StorageMaintenanceDatatablesView(DatatablesView):
     model = ArchiveObject
     #queryset = ArchiveObject.objects.exclude(Q(storage__storageMediumUUID__storageMediumStatus = 0))
@@ -384,7 +459,7 @@ class StorageMaintenanceDatatablesView(DatatablesView):
     def process_dt_response(self, data):
         self.form = DatatablesForm(data)
         if self.form.is_valid():
-            flush_transaction()
+            #flush_transaction()
             #self.object_list = self.get_queryset().extra(where=["NOT `storageMedium`.`storageMediumStatus` = %s"],params=['0']).values(*self.get_db_fields())
             self.object_list_with_writetapes = self.get_queryset().extra(where=["NOT `storageMedium`.`storageMediumStatus` = %s"],params=['0']).values(*self.get_db_fields())
             self.object_list = []
@@ -461,7 +536,8 @@ class StorageMaintenanceDatatablesView(DatatablesView):
             #Prepare storage method list
             sm_objs = []
 
-            current_mediumid_search = self.dt_data['sSearch_%s' % '4']
+            #current_mediumid_search = self.dt_data['sSearch_%s' % '4']
+            current_mediumid_search = self.dt_data.get('sSearch_%s' % '4','xxx')
             logger.debug('col4 serach: %s' % current_mediumid_search)
 
             # Check whether the criteria for replacement of media target prefix is met
@@ -506,7 +582,7 @@ class StorageMaintenanceDatatablesView(DatatablesView):
                 if sm_obj.status == 1:
                     for d in self.object_list_with_writetapes:
                         if d['storage__storageMediumUUID__storageMediumID'] is not None:
-                            if (sm_obj.type in range(300,306) and
+                            if (sm_obj.type in range(300,330) and
                                 d['storage__storageMediumUUID__storageMediumID'].startswith(sm_obj.target) and
                                 d['ObjectUUID'] == obj['ObjectUUID']
                                 ) or\
@@ -591,7 +667,8 @@ class StorageMaintenanceDatatablesView(DatatablesView):
                         #print 'storage_list2_len after: %s' % len(storage_list2)
                         #pass
             if len(storage_list2) == 0:
-                deactivate_media_list.append([storageMediumID])
+                #deactivate_media_list.append([storageMediumID])
+                deactivate_media_list.append(['','','','',storageMediumID,'','','','','','','','','','','',''])
             else:
                 #need_to_migrate_dict[storageMediumID] = storage_list2
                 for m in storage_list2:
@@ -715,7 +792,7 @@ class MigrationList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(MigrationList, self).get_context_data(**kwargs)
-        context['label'] = 'ADMINISTRATION - Storage Maintenance list'
+        context['label'] = 'ADMINISTRATION - Storage Migration  list'
         context['MigrationReqType_CHOICES'] = dict(MigrationReqType_CHOICES)
         context['ReqStatus_CHOICES'] = dict(ReqStatus_CHOICES)
         return context
@@ -745,6 +822,7 @@ class MigrationCreate(CreateView):
     form_class = MigrationQueueForm
     obj_list = None
     target_list = None
+    copy_only_flag = None
 
     @method_decorator(permission_required('essarch.add_migrationqueue'))
     def dispatch(self, *args, **kwargs):
@@ -756,12 +834,12 @@ class MigrationCreate(CreateView):
         POST variables and then checked for validity.
         """
         logger = logging.getLogger('essarch.storagemaintenance')
+        print("hit kom vi")
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            #print 'Form is valid!!!'
-            #print request.POST
+
             # Convert ObjectIdentifierValue to list
             obj_list = self.request.POST.get('ObjectIdentifierValue','')
             if request.is_ajax():
@@ -776,12 +854,17 @@ class MigrationCreate(CreateView):
                 #return HttpResponseBadRequest()
             else:
                 self.obj_list = obj_list.split(' ')
-            # Convert TargetMediumID to list and remove "+"
+            # Convert TargetMediumID to list and remove "+" ## Convert to checkbox answer.
             target_list = self.request.POST.get('TargetMediumID',None)
             self.target_list = target_list.split(' ')
             for c, target_item in enumerate(self.target_list):
                 if target_item.startswith('+'):
                     self.target_list[c] = target_item[1:]
+
+#            # Copy OnlyFlag       
+#           self.copy_only_flag = self.request.POST.get('CopyOnlyFlag', None)
+#           print 'copy_only_flag: %s %s' % (str(self.copy_only_flag), type(self.copy_only_flag))
+
             return self.form_valid(form)
         else:
             #print 'Form Not valid problem!!!'
@@ -810,7 +893,8 @@ class MigrationCreate(CreateView):
         initial['user'] = self.request.user.username
         initial['Status'] = 0
         initial['ReqType'] = self.request.GET.get('ReqType',1)
-        initial['ReqPurpose'] = self.request.GET.get('ReqPurpose') 
+        initial['ReqPurpose'] = self.request.GET.get('ReqPurpose')
+        initial['CopyOnlyFlag'] = self.request.GET.get('CopyOnlyFlag')
         #if initial['ReqType'] == 1:
         #    migration_path = Path.objects.get(entity='path_control').value
         #initial['Path'] = self.request.GET.get('Path', migration_path)
@@ -820,14 +904,19 @@ class MigrationCreate(CreateView):
     
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        
+        #print( self.object.CopyOnlyFlag)
         self.object.pk = None 
         self.object.user = self.request.user.username
         self.object.ObjectIdentifierValue = self.obj_list
         self.object.TargetMediumID = self.target_list
         self.object.ReqUUID = uuid.uuid1()
+        #self.object.CopyOnlyFlag = self.copy_only_flag
+        self.object.CopyOnlyFlag = form.cleaned_data.get('CopyOnlyFlag',False)
+        print 'copy_only_flagrrr: %s %s' % (str(form.cleaned_data.get('CopyOnlyFlag',False)), type(form.cleaned_data.get('CopyOnlyFlag',False)))
+        #print 'copy_only_flagrrr: %s %s' % (str(form.cleaned_data('CopyOnlyFlag',False)), type(form.cleaned_data('CopyOnlyFlag',False)))
         self.object.save()
         req_pk = self.object.pk
+        print(self.object)
         result = MigrationTask.delay_or_eager(obj_list=self.object.ObjectIdentifierValue, mig_pk=req_pk)
         task_id = result.task_id
         self.object.task_id = task_id

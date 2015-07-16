@@ -2,7 +2,7 @@
 
     "use strict";
 
-    var $table = $('#archiveobject-table');
+    var $table = $('#deactivate_media-table');
 
     function fnFilterGlobal() {
         $table.dataTable().fnFilter(
@@ -17,12 +17,12 @@
     	var oTable = $table.dataTable();
     	oTable.fnFilter(
             $("#filter-"+i).val(),
-            i,
-            $("#regex-"+i)[0].checked
+            i
+            //$("#regex-"+i)[0].checked
             //false
         );
     	//alert('setdef in JS:'+i+' value:'+$("#filter-"+i).val())
-    	oTable.fnSetColumnVis( i, $("#filterhide-"+i)[0].checked ? false : true );
+    	// oTable.fnSetColumnVis( i, $("#filterhide-"+i)[0].checked ? false : true );
     }
 
     function createFilter(i) {
@@ -42,7 +42,7 @@
     function createFilterHide(i) {
         return function() { fnShowHide(i); };
     }
-    
+   
     function DeactivateMediaTable(json) {
         $('#deactivate_media-table').dataTable({
         	"sPaginationType": "bootstrap",
@@ -84,6 +84,10 @@
 		                            ],
 		                            "success": function () {
 		                                alert( "Success to deactivate media" );
+		                                //fnReloadAjax();
+		                                //fnDraw();
+		                                //$('#deactivate_media-table').dataTable.ajax.reload();
+		                                //DeactivateMediaTable.dataTable.ajax.reload();
 		                            },
 		                            "dataType": "json",
 		                            "type": "POST",
@@ -163,142 +167,109 @@
                 $.getJSON( sSource, aoData, function (json) {
                 	//Here you can do whatever you want with the additional data
                     console.dir(json);
-                    //$('#deactivate_media').html(json.deactivate_media_list);
-                    DeactivateMediaTable(json);
+                    //$('#deactivate_media').html(json.deactivate+*_media_list);
+                    //DeactivateMediaTable(json);
                     NeedToMigrateTable(json);
                     //Call the standard callback to redraw the table
+                    json.aaData=json.deactivate_media_list
+                    //fnCallback(json.deactivate_media_list);
                     fnCallback(json);
                 } );
             },
             "aoColumnDefs": [
-                 { 'bVisible': false, 'aTargets': [ 1 ] },
-                 { 'bRegex': true, 'aTargets': [ 4 ] }
-            ],
+                             { 'bVisible': false, 'aTargets': [ 0 ] },
+                             { 'bVisible': false, 'aTargets': [ 1 ] },
+                             { 'bVisible': false, 'aTargets': [ 2 ] },
+                             { 'bVisible': false, 'aTargets': [ 3 ] },
+                             { 'bVisible': false, 'aTargets': [ 5 ] },
+                             { 'bVisible': false, 'aTargets': [ 6 ] },                             
+                             { 'bVisible': false, 'aTargets': [ 7 ] },
+                             { 'bVisible': false, 'aTargets': [ 8 ] },
+                             { 'bVisible': false, 'aTargets': [ 9 ] },
+                             { 'bVisible': false, 'aTargets': [ 10 ] },
+                             { 'bVisible': false, 'aTargets': [ 11 ] },
+                             { 'bVisible': false, 'aTargets': [ 12 ] },
+                             { 'bVisible': false, 'aTargets': [ 13 ] },
+                             { 'bVisible': false, 'aTargets': [ 14 ] },
+                             { 'bVisible': false, 'aTargets': [ 15 ] },
+                             { 'bVisible': false, 'aTargets': [ 16 ] },                         
+                             { 'bRegex': true, 'aTargets': [ 4 ] }
+                        ],            
             //"sDom": 'T<"clear">lfrtip',
             "sDom": 'lTrtip',
             "oTableTools": {
-            	"sSwfPath": "/static/TableTools/media/swf/copy_csv_xls_pdf.swf",
             	"sRowSelect": "multi",
-            	//"sRowSelect": "single",
         		"aButtons": [
-	             	"select_all",
-	             	"select_none",
-//	                {
-//	                    "sExtends":    "copy",
-//	                    "bSelectedOnly": "true"
-//	                },
-//	                {
-//	                    "sExtends":    "pdf",
-//	                    "bSelectedOnly": "true"
-//	                },
-//	                {
-//	                    "sExtends":    "text",
-//	                    "sButtonText": "testknapp",
-//	                    "fnClick": function ( nButton, oConfig, oFlash, oTable) {
-//	                    	var data = $('#filter-5').val();
-//	                    	//var CSRF_TOKEN = '{{ csrf_token }}';
-//	                    	var CSRF_TOKEN = document.getElementsByName('csrfmiddlewaretoken')[0].value
-//	                    	//var CSRF_TOKEN = $cookies['csrftoken']
-//	                        alert( 'Mouse click'+data+CSRF_TOKEN);
-//	                    }
-//	                },
+             		"select_all",
+             		"select_none",
 	                {
 	                    "sExtends":    "ajax",
-	                    "sButtonText": "Start migration",
+	                    "sButtonText": "Deactivate media",
 	                    "bSelectedOnly": "true",
 	                    "bHeader" : false,
-	                    //"mColumns": [1,],
-	                    //"sFieldSeperator": ",",
-	                    "sAjaxUrl" : Django.url('migration_create_parameter'),
+	                    "sAjaxUrl" : Django.url('deactivatemedia_create'),
 	                    "fnClick": function( nButton, oConfig ) {
-	                        //var sData = this.fnGetTableData(oConfig);
 	                        var aData = this.fnGetSelectedData();
-	                        //console.log( JSON.stringify(aData) );
-	                        //var aaData = [];
-	                        //for (var i=0;i<aData.length;i++) {
-	                        //    //aaData.push(['row']);
-	                        //	aaData.push([
-	                        //		aData[i]+'\r\n',
-	                        //		//'\n',
-                        	//	]);
-	                        //}
-	                        //alert('aaData:'+aaData+'end')
-	                        //console.dir(aData);	                    
-	                        var data = $('#filter-5').val();
-	                        if (confirm ('Do you really want to start migration to target '+data+'?')){
+	                        var aDataCol4 = [];
+	                        for (var i=0;i<aData.length;i++) {
+	                        	aDataCol4.push([
+	                        		aData[i][4],
+                        		]);
+	                        }
+	                        //alert('aDataCol4:'+aDataCol4+'end')
+	                        if (confirm ('Do you really want to start deactivate media: '+aDataCol4+'?')){
 		                        $.ajax( {
 		                            "url": oConfig.sAjaxUrl,
 		                            "data": [		                                    
+											{
+												"name": "ReqPurpose", 
+												"value": $('#ReqPurpose').val()
+											},
 			                                { 
-			                                	"name": "Status", 
-			                                	"value": '0',
-			                                },
-			                                {
-			                                	"name": "TargetMediumID", 
-			                                	"value": data
-			                                },
-			                                {
-			                                	"name": "ReqPurpose", 
-			                                	"value": $('#ReqPurpose').val()
-			                                },
-			                                { 
-			                                	"name": "ObjectIdentifierValue", 
-			                                	"value": JSON.stringify(aData),
-			                                },
-			                                {
-			                                	"name": "user", 
-			                                	"value": 'x'
-			                                },
-			                                {
-			                                	"name": "ReqType", 
-			                                	"value": '1'
-			                                },
-			                                {
-			                                	"name": "Path", 
-			                                	"value": $('#tmpmigpath').val()
-			                                },
-			                                {
-			                                	"name": "CopyPath", 
-			                                	"value": $('#copypath').val()
-			                                },
-			                                {
-			                                	"name": "ReqUUID", 
-			                                	"value": 'x'
+			                                	"name": "MediumList", 
+			                                	"value": JSON.stringify(aDataCol4),
 			                                },
 			                                { 
 			                                	"name": "csrfmiddlewaretoken",
 			                                	"value": document.getElementsByName('csrfmiddlewaretoken')[0].value
 			                                }
 		                            ],
-		                            "success": oConfig.fnAjaxComplete,
+		                            "success": function () {
+		                                alert( "Success to deactivate media" );
+		                                //oConfig.ajax.reload();
+		                                //$('#filter-4').trigger('change');
+		                                var oTable = $table.dataTable();
+		                                oTable.fnDraw();
+		                                
+		                            },
 		                            "dataType": "json",
 		                            "type": "POST",
 		                            "cache": false,
 		                            "error": function () {
-		                                alert( "Failed to create migration request" );
+		                                alert( "Failed to deactivate media" );
 		                            }
 		                        } );
 	                        }
-	                        else {alert('Migration canceled');}
+	                        else {alert('Deactivate media canceled');}
 	                    },
-	                    "fnAjaxComplete": function ( json ) {
-	                    	//var CompleteUrl = Django.url('migration_detail');
-	                    	var CompleteUrl = "/administration/migredetail/"
-	                    	var req_pk = json.req_pk;
-	                    	var task_id = json.task_id;
-		                    alert( 'Success to create migration request' );
-		                    window.location.replace(CompleteUrl + json.req_pk);
-		                    //window.location.href = CompleteUrl + json.req_pk;
-	                    }
 	                },
-	               
 		         ]
             } 
         });
         //$("#global-filter").keyup( fnFilterGlobal );
         //$("#global-regex").click( fnFilterGlobal );
         for (var i=0; i<9; i++) {
-            $("#filter-"+i).keyup(createFilter(i)); 
+        	
+            if(i == 7){
+            	$("#filter-"+i).change(createFilter(i));
+            }
+            else if(i == 4){
+            	$("#filter-"+i).change(createFilter(i));
+            }
+            else{
+            	$("#filter-"+i).keyup(createFilter(i));
+            }
+           
             // Set initial default values
             if ($("#filter-"+i).val()) {
             	fnFilterColumn(i)

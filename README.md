@@ -14,6 +14,7 @@ Login and create database 'eark':
 
     mysql -u root -p<password>
     create database eark;
+    grant all on eark.* to arkiv@localhost identified by 'arkiv';
 
 ### Install RabbitMQ
 
@@ -153,8 +154,6 @@ Adapt MySQL database settings in the following files:
 
     $EPPMOD/config/settings_dev.py (DATABASES)
     $EPPMOD/workers/ESSDB.py (DATABASES_dict)
-
-Set user=”root”/password=”<password>” and the database name “eark”.
 
 ### Prepare database
 
